@@ -5,10 +5,10 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-inventory-27
-    appVersion: "SNAPSHOT-PR-27-c60e0127"
-    group: com.stakater.platform
+    appVersion: "SNAPSHOT-PR-27-90b9420c"
+    group: com.stakater
     provider: stakater
-    team: stakater
+    team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
@@ -16,7 +16,6 @@ metadata:
 spec:
   selector:
     app: stakater-nordmart-inventory-27
-    app: inventory
   ports:
     - name: https
       port: 8080
@@ -28,10 +27,10 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-inventory-27
-    appVersion: "SNAPSHOT-PR-27-c60e0127"
-    group: com.stakater.platform
+    appVersion: "SNAPSHOT-PR-27-90b9420c"
+    group: com.stakater
     provider: stakater
-    team: stakater
+    team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
@@ -39,7 +38,7 @@ metadata:
     reloader.stakater.com/auto: "true"
   name: stakater-nordmart-inventory-27
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: stakater-nordmart-inventory-27
@@ -49,11 +48,10 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-inventory-27
-        app: inventory
     spec:
       containers:
       - name: stakater-nordmart-inventory-27
-        image: "docker.io/stakater/stakater-nordmart-inventory:SNAPSHOT-PR-27-c60e0127"
+        image: "docker.io/stakater/stakater-nordmart-inventory:SNAPSHOT-PR-27-90b9420c"
         imagePullPolicy: IfNotPresent
         env:
           - name: JAEGER_ENDPOINT
