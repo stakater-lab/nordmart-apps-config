@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-inventory-28
-    appVersion: "SNAPSHOT-PR-28-8467c72c"
+    appVersion: "SNAPSHOT-PR-28-5796b622"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-inventory-28
-    appVersion: "SNAPSHOT-PR-28-8467c72c"
+    appVersion: "SNAPSHOT-PR-28-5796b622"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -42,7 +42,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-inventory-28
-    appVersion: "SNAPSHOT-PR-28-8467c72c"
+    appVersion: "SNAPSHOT-PR-28-5796b622"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -63,10 +63,13 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-inventory-28
+      annotations:
+        app: inventory
+        team: nordmart
     spec:
       containers:
       - name: stakater-nordmart-inventory-28
-        image: "docker.io/stakater/stakater-nordmart-inventory:SNAPSHOT-PR-28-8467c72c"
+        image: "docker.io/stakater/stakater-nordmart-inventory:SNAPSHOT-PR-28-5796b622"
         imagePullPolicy: IfNotPresent
         env:
           - name: JAEGER_ENDPOINT
@@ -107,13 +110,41 @@ spec:
             cpu: 0.1
       serviceAccountName: stakater-nordmart-inventory-28
 ---
+# Source: application/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: stakater-nordmart-inventory-28
+  labels:
+    app: stakater-nordmart-inventory-28
+    appVersion: "SNAPSHOT-PR-28-5796b622"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+    router: default
+spec:
+  port:
+    targetPort: http
+
+  to:
+    kind: Service
+    name: stakater-nordmart-inventory-28
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
 # Source: application/templates/servicemonitor.yaml
 apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
   labels:
     app: stakater-nordmart-inventory-28
-    appVersion: "SNAPSHOT-PR-28-8467c72c"
+    appVersion: "SNAPSHOT-PR-28-5796b622"
     group: com.stakater
     provider: stakater
     team: nordmart
