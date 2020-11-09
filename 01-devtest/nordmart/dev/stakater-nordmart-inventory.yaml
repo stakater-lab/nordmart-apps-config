@@ -1,4 +1,19 @@
 ---
+# Source: application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: inventory
+    appVersion: "v0.0.16"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  name: inventory
+---
 # Source: application/templates/service.yaml
 apiVersion: v1
 kind: Service
@@ -17,7 +32,7 @@ spec:
   selector:
     app: inventory
   ports:
-    - name: https
+    - name: http
       port: 8080
       targetPort: 8080
 ---
@@ -38,7 +53,7 @@ metadata:
     reloader.stakater.com/auto: "true"
   name: inventory
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: inventory
@@ -48,6 +63,9 @@ spec:
     metadata:
       labels:
         app: inventory
+      annotations:
+        app: inventory
+        team: nordmart
     spec:
       containers:
       - name: inventory
@@ -58,13 +76,13 @@ spec:
             value: http://jaeger-collector.istio-system:14268/api/traces
           - name: POSTGRESQL_HOST
             value: stakater-nordmart-inventory-postgresql-svc
-          - name: DB_NAME
-            value: inventory
           - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
                 key: POSTGRES_PASSWORD
-                name: inventory-postgresql-secret          
+                name: inventory-postgresql-secret
+          - name: DB_NAME
+            value: inventory          
         livenessProbe:
           failureThreshold: 3
           periodSeconds: 60
@@ -91,3 +109,57 @@ spec:
             memory: 128Mi
             cpu: 0.1
       serviceAccountName: inventory
+---
+# Source: application/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: inventory
+  labels:
+    app: inventory
+    appVersion: "v0.0.16"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+    router: default
+spec:
+  port:
+    targetPort: http
+
+  to:
+    kind: Service
+    name: inventory
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+# Source: application/templates/servicemonitor.yaml
+apiVersion: "monitoring.coreos.com/v1"
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: inventory
+    appVersion: "v0.0.16"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  name: inventory-svc-monitor
+spec:
+  selector:
+    matchLabels:
+      app: inventory
+  namespaceSelector:
+    matchNames:
+    - nordmart-dev
+  endpoints:
+    - interval: 5s
+      path: /prometheus
+      port: http
