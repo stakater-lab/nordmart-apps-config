@@ -1,0 +1,396 @@
+---
+# Source: helm/charts/application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: stakater-nordmart-inventory-32
+    appVersion: "SNAPSHOT-PR-32-8b541a5d"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  name: stakater-nordmart-inventory-32
+---
+# Source: helm/charts/postgresql/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.1.4
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+    app.kubernetes.io/managed-by: Helm
+  name: inventory-postgres
+---
+# Source: helm/charts/application/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: stakater-nordmart-inventory-32
+    appVersion: "SNAPSHOT-PR-32-8b541a5d"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  name: stakater-nordmart-inventory-32
+spec:
+  selector:
+    app: stakater-nordmart-inventory-32
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+---
+# Source: helm/charts/postgresql/templates/svc-headless.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-postgres-headless
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.1.4
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+---
+# Source: helm/charts/postgresql/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.1.4
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  type: ClusterIP
+  ports:
+    - name: tcp-postgresql
+      port: 5432
+      targetPort: tcp-postgresql
+  selector:
+    app.kubernetes.io/name: postgresql
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+    role: master
+---
+# Source: helm/charts/application/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stakater-nordmart-inventory-32
+    appVersion: "SNAPSHOT-PR-32-8b541a5d"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  annotations: 
+    reloader.stakater.com/auto: "true"
+  name: stakater-nordmart-inventory-32
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stakater-nordmart-inventory-32
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: stakater-nordmart-inventory-32
+      annotations:
+        app: inventory
+        team: nordmart
+    spec:      
+      imagePullSecrets:
+      - name: map[name:inventory-docker-reg]
+      containers:
+      - name: stakater-nordmart-inventory-32
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-inventory:SNAPSHOT-PR-32-8b541a5d"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: JAEGER_ENDPOINT
+            value: http://jaeger-collector.istio-system:14268/api/traces
+          - name: POSTGRESQL_HOST
+            value: inventory-postgres
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgresql-password
+                name: inventory-postgresql-secret
+          - name: DB_NAME
+            value: inventory          
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 15
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 15
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 0.5
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      serviceAccountName: stakater-nordmart-inventory-32
+---
+# Source: helm/charts/postgresql/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: inventory-postgres
+  labels:
+    app.kubernetes.io/name: postgresql
+    helm.sh/chart: postgresql-9.1.4
+    app.kubernetes.io/instance: stakater-nordmart-inventory
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  serviceName: inventory-postgres-headless
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgresql
+      app.kubernetes.io/instance: stakater-nordmart-inventory
+      role: master
+  template:
+    metadata:
+      name: inventory-postgres
+      labels:
+        app.kubernetes.io/name: postgresql
+        helm.sh/chart: postgresql-9.1.4
+        app.kubernetes.io/instance: stakater-nordmart-inventory
+        app.kubernetes.io/managed-by: Helm
+        role: master
+    spec:      
+      serviceAccountName: inventory-postgres
+      initContainers:
+        - name: init-chmod-data
+          image: docker.io/bitnami/minideb:stretch
+          imagePullPolicy: "Always"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          command:
+            - /bin/sh
+            - -cx
+            - |
+              mkdir -p /bitnami/postgresql/data
+              chmod 700 /bitnami/postgresql/data
+              find /bitnami/postgresql -mindepth 1 -maxdepth 1 -not -name "conf" -not -name ".snapshot" -not -name "lost+found" | \
+                xargs chown -R `id -u`:`id -G | cut -d " " -f2`
+          securityContext:
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/postgresql
+              subPath: 
+            - name: dshm
+              mountPath: /dev/shm
+      containers:
+        - name: inventory-postgres
+          image: docker.io/bitnami/postgresql:11.8.0-debian-10-r76
+          imagePullPolicy: "Always"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: POSTGRESQL_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_VOLUME_DIR
+              value: "/bitnami/postgresql"
+            - name: PGDATA
+              value: "/bitnami/postgresql/data"
+            - name: POSTGRES_USER
+              value: "admin"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: inventory-postgresql-secret
+                  key: postgresql-password
+            - name: POSTGRES_DB
+              value: "inventory"
+            - name: POSTGRESQL_ENABLE_LDAP
+              value: "no"
+            - name: POSTGRESQL_ENABLE_TLS
+              value: "no"
+          ports:
+            - name: tcp-postgresql
+              containerPort: 5432
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - exec pg_isready -U "admin" -d "dbname=inventory" -h 127.0.0.1 -p 5432
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "admin" -d "dbname=inventory" -h 127.0.0.1 -p 5432
+                  [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 6
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
+            - name: data
+              mountPath: /bitnami/postgresql
+              subPath: 
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "2Gi"
+        storageClassName: stakater
+---
+# Source: helm/charts/application/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: stakater-nordmart-inventory-32
+  labels:
+    app: stakater-nordmart-inventory-32
+    appVersion: "SNAPSHOT-PR-32-8b541a5d"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+    router: default
+spec:
+  port:
+    targetPort: http
+
+  to:
+    kind: Service
+    name: stakater-nordmart-inventory-32
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
+# Source: helm/templates/image-secret.yaml
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: inventory-docker-reg
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBRkv501CDMFiusM5ctYWXB9lJmvE/78vogbmxs84/N6zhSCCVToppo5dSEpYT/oA/Vi9ijuLlIaeAgrX1tyfVgXgTW6QFiBlMV+rfShv+UBLO9EiAznsmRTNl3fFNBKQVW5KcSdSSUgqvecz/hGkf2xFVubWkMROw9+oCy+y3zgL+Xxa4Xg1/JOnQj/2RqeRExaeXWsiWgPFFuwA2CrwkNWjRARow/4yVx2CWZwHdVKP7IpQNW2I03/QbUWv97lAGo6111Q9hkSj0PNhmzFEJhpEY1WxZ3yU92uaah7/JNBd5bRmDAi+Ixlkjsxlll+PBLdtCgGcQaylwqTtZzC0+cZ6F6SznQ7gVjpg25DTOpn87ZB6v2eVEOU5OWcqtCiP4oQbIaPzGV9NO1wLrvpeb1lDnM2v5L9nYB3yxF+8QMf5Hd1OP+6cMXLuEgQKNZzI9L9BND0j/4fbAao30fx7xZ6lxWSMscaUAIbJeetNFh6H+smimPUPSwiPppJJUWnApsL0tSxEcnxfQw86fkmp6UN7f7Ye1C7XNFzNQMn1cCbCw9Q3pw1s2KRBSxLkr/+DI9ke/2wm0m8ZdMy5kX6TPCH6EWDRbNXishzP1bQhh5ysCP5IvHW8hRW6wcKZTb/5jSkyKGaNn4IHyPymdiefmBdB+kN4sv/BuGwMYzD02KWTXUvKemLxx+BeKMFAavpyc9D1AOQDnmTBXD7a1vqEpp9764n2kqC7TQ41gGuPsGOz2xvTdMQQHvT4VnyGd/dO8uyP5ArKqKRGDipqx5Sj5LdswDLOmOJSwwfo2S0xdFaN3n7to2XyUBrF758cKNEffp2JvGezVjt8a8L1GsABLNx3mqR0wafYAhnEx4YJCW8RxDR+qD9yxAhw2KSDc=
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: inventory-docker-reg
+    type: kubernetes.io/dockerconfigjson
+---
+# Source: helm/templates/postgres-secret.yaml
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: inventory-postgresql-secret
+spec:
+  encryptedData:
+    postgresql-password: AgBV80+5nVP1U1lD8Gtuymu44b8AimreBwEXPyv49RJ8PzKrd/IORfCY7sg5//v5yMNOVjQxqDb4YdMqUK3jRoUB5QRRHsI0o8I0Nq9zMKKMoviYHsMusO6wi5BIX73xbGwYhqXF9t2UeH8FgeeVUgO4Y4gdu8DlewdGCvWdZGWMlAYsuQV73d2nwPIBHZBNhcdHv4OH1iWyvijuS28ioAP91r96JQa4YHD+eWGj+VZBGBF2D8dAdjlS4UolChgkyWoCikQQnRBkkOMzft2YHjRFlcZUdA97B8yQ4hmE4BbfhWN3qMOQIMNY1AFFTkrZL0OUG4mvduI0SwMItc9NOrsGu6yB4S+WzwUbP7GTxIHAFJCDHjqkWrSOfWgDLzlxg+hy751rFcHeOvxAVWJvQ9D1q/ODDULlv6exngcNdiVVWoIuSbtPuKkxTIBGTQGCkB2jHOHgFNVeR6uncpunxjG8w0ALsKho9gYmK4foy5dFqqY9dtnxQkK/AhNn6+fOt4d15o9P9aDpuK9C+3ICLKzxyE3tHL0LtxsDBISODDiuQJTD8bB3MgppR+EH4ZxChDH2hi+CdOcCuVewYzEqfe6e3YDtfb5nBSZKDa0LCJjDO+eFKmj8AEdFhTyqGbnYKRM7/ak+sYrBEY3WB2NwMW5x+Od6azRkUFcMwM1zicL6E0bdokgJgmomH74X19/U5sOA/W0LLcJSIw==
+    postgresql-postgres-password: AgBWDPIDbu4bUIRQjZdoBdsKyU8/4luVvE0vBPtpcXgGQLnbZtysKqLuBlRrur0LxhZVtfgRHTsqpdEzLdI9sjwUSQv3h2vEVv4NHkMWXeXYkB4QCfZAzDXMhTb+6VwaiLfk9PcguQMIH679SxuYJrL8+rGr+shnU5Ze0Zgcg71BZq+9LslXgg8/IjbJlql04pD1QIfyJEENjO7GlCEog1LHDSy/bLgK3s7Y4B+zclRmiP/ALbsVh0rseLcNdElkyiAogrgL7r788ISLU7F4ampo6g1/3JdPk4BXoSn79w6K/RgphrBLqn1duT/34LGulD8VxzxeYMyCvobfXoC4bYp9nJIsSIKVqIuwlQF8NhDQ+XnStqnss+RNe80YwljzcNvw/1aYB+mWddgb4qN0IOmcXenOu1B8E33pNIViliPot5dLeJsPm3aud6cprw7K82PW0mrkCpR2XHRp/Qv5rLJiANoM1oufdKZiwHYLYE/K9J33s10SiuJcQ+wSF5RD+qdUflor0bewEGr13OdjEjtGcPTXRw2t1ikQqBWkQKz2wdM2g8moTakqgGPpBvhU810684y0nPWVZwFhK1J5xIwhNvzYVWIgU+mgngIz/iXuC/OXzs2ie1u3IaVLmhtaZSNmb2CdZHKhNgzltBONLtWViH6fbYs7PH0bsm8VLlLU4+IQhlh1xauoF8lYxL5cPuWEaDmftEBVcsDv
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: inventory-postgresql-secret
+---
+# Source: helm/charts/application/templates/servicemonitor.yaml
+apiVersion: "monitoring.coreos.com/v1"
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: stakater-nordmart-inventory-32
+    appVersion: "SNAPSHOT-PR-32-8b541a5d"
+    group: com.stakater
+    provider: stakater
+    team: nordmart
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-inventory"
+    heritage: "Helm"
+  name: stakater-nordmart-inventory-32-svc-monitor
+spec:
+  selector:
+    matchLabels:
+      app: stakater-nordmart-inventory-32
+  namespaceSelector:
+    matchNames:
+    - nordmart-pr
+  endpoints:
+    - interval: 5s
+      path: /prometheus
+      port: http
