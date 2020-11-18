@@ -4,15 +4,15 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-29
+    appVersion: "SNAPSHOT-PR-29-b0b2b987"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory
+  name: stakater-nordmart-inventory-29
 ---
 # Source: helm/charts/postgresql/templates/serviceaccount.yaml
 apiVersion: v1
@@ -30,18 +30,18 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-29
+    appVersion: "SNAPSHOT-PR-29-b0b2b987"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory
+  name: stakater-nordmart-inventory-29
 spec:
   selector:
-    app: inventory
+    app: stakater-nordmart-inventory-29
   ports:
     - name: http
       port: 8080
@@ -95,8 +95,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-29
+    appVersion: "SNAPSHOT-PR-29-b0b2b987"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -105,25 +105,27 @@ metadata:
     heritage: "Helm"
   annotations: 
     reloader.stakater.com/auto: "true"
-  name: inventory
+  name: stakater-nordmart-inventory-29
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: inventory
+      app: stakater-nordmart-inventory-29
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: inventory
+        app: stakater-nordmart-inventory-29
       annotations:
         app: inventory
         team: nordmart
-    spec:
+    spec:      
+      imagePullSecrets:
+      - name: map[name:inventory-image-secrets]
       containers:
-      - name: inventory
-        image: "DOCKER_REPOSITORY_URL:IMAGE_TAG"
+      - name: stakater-nordmart-inventory-29
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-inventory:SNAPSHOT-PR-29-b0b2b987"
         imagePullPolicy: IfNotPresent
         env:
           - name: JAEGER_ENDPOINT
@@ -162,7 +164,7 @@ spec:
           requests:
             memory: 128Mi
             cpu: 0.1
-      serviceAccountName: inventory
+      serviceAccountName: stakater-nordmart-inventory-29
 ---
 # Source: helm/charts/postgresql/templates/statefulset.yaml
 apiVersion: apps/v1
@@ -309,10 +311,10 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: inventory
+  name: stakater-nordmart-inventory-29
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-29
+    appVersion: "SNAPSHOT-PR-29-b0b2b987"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -326,14 +328,31 @@ spec:
 
   to:
     kind: Service
-    name: inventory
+    name: stakater-nordmart-inventory-29
     weight: 100
   wildcardPolicy: None
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
 ---
-# Source: helm/templates/secret.yaml
+# Source: helm/templates/image-secret.yaml
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  name: inventory-image-secrets
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBRkv501CDMFiusM5ctYWXB9lJmvE/78vogbmxs84/N6zhSCCVToppo5dSEpYT/oA/Vi9ijuLlIaeAgrX1tyfVgXgTW6QFiBlMV+rfShv+UBLO9EiAznsmRTNl3fFNBKQVW5KcSdSSUgqvecz/hGkf2xFVubWkMROw9+oCy+y3zgL+Xxa4Xg1/JOnQj/2RqeRExaeXWsiWgPFFuwA2CrwkNWjRARow/4yVx2CWZwHdVKP7IpQNW2I03/QbUWv97lAGo6111Q9hkSj0PNhmzFEJhpEY1WxZ3yU92uaah7/JNBd5bRmDAi+Ixlkjsxlll+PBLdtCgGcQaylwqTtZzC0+cZ6F6SznQ7gVjpg25DTOpn87ZB6v2eVEOU5OWcqtCiP4oQbIaPzGV9NO1wLrvpeb1lDnM2v5L9nYB3yxF+8QMf5Hd1OP+6cMXLuEgQKNZzI9L9BND0j/4fbAao30fx7xZ6lxWSMscaUAIbJeetNFh6H+smimPUPSwiPppJJUWnApsL0tSxEcnxfQw86fkmp6UN7f7Ye1C7XNFzNQMn1cCbCw9Q3pw1s2KRBSxLkr/+DI9ke/2wm0m8ZdMy5kX6TPCH6EWDRbNXishzP1bQhh5ysCP5IvHW8hRW6wcKZTb/5jSkyKGaNn4IHyPymdiefmBdB+kN4sv/BuGwMYzD02KWTXUvKemLxx+BeKMFAavpyc9D1AOQDnmTBXD7a1vqEpp9764n2kqC7TQ41gGuPsGOz2xvTdMQQHvT4VnyGd/dO8uyP5ArKqKRGDipqx5Sj5LdswDLOmOJSwwfo2S0xdFaN3n7to2XyUBrF758cKNEffp2JvGezVjt8a8L1GsABLNx3mqR0wafYAhnEx4YJCW8RxDR+qD9yxAhw2KSDc=
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      name: inventory-image-secrets
+    type: kubernetes.io/dockerconfigjson
+---
+# Source: helm/templates/postgres-secret.yaml
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
@@ -355,19 +374,19 @@ apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-29
+    appVersion: "SNAPSHOT-PR-29-b0b2b987"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory-svc-monitor
+  name: stakater-nordmart-inventory-29-svc-monitor
 spec:
   selector:
     matchLabels:
-      app: inventory
+      app: stakater-nordmart-inventory-29
   namespaceSelector:
     matchNames:
     - nordmart-pr
