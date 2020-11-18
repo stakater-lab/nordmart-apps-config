@@ -4,15 +4,15 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-31
+    appVersion: "SNAPSHOT-PR-31-e043e9b3"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory
+  name: stakater-nordmart-inventory-31
 ---
 # Source: helm/charts/postgresql/templates/serviceaccount.yaml
 apiVersion: v1
@@ -30,18 +30,18 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-31
+    appVersion: "SNAPSHOT-PR-31-e043e9b3"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory
+  name: stakater-nordmart-inventory-31
 spec:
   selector:
-    app: inventory
+    app: stakater-nordmart-inventory-31
   ports:
     - name: http
       port: 8080
@@ -95,8 +95,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-31
+    appVersion: "SNAPSHOT-PR-31-e043e9b3"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -105,25 +105,25 @@ metadata:
     heritage: "Helm"
   annotations: 
     reloader.stakater.com/auto: "true"
-  name: inventory
+  name: stakater-nordmart-inventory-31
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: inventory
+      app: stakater-nordmart-inventory-31
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app: inventory
+        app: stakater-nordmart-inventory-31
       annotations:
         app: inventory
         team: nordmart
     spec:
       containers:
-      - name: inventory
-        image: "DOCKER_REPOSITORY_URL:IMAGE_TAG"
+      - name: stakater-nordmart-inventory-31
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-inventory:SNAPSHOT-PR-31-e043e9b3"
         imagePullPolicy: IfNotPresent
         env:
           - name: JAEGER_ENDPOINT
@@ -162,7 +162,7 @@ spec:
           requests:
             memory: 128Mi
             cpu: 0.1
-      serviceAccountName: inventory
+      serviceAccountName: stakater-nordmart-inventory-31
 ---
 # Source: helm/charts/postgresql/templates/statefulset.yaml
 apiVersion: apps/v1
@@ -309,10 +309,10 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: inventory
+  name: stakater-nordmart-inventory-31
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-31
+    appVersion: "SNAPSHOT-PR-31-e043e9b3"
     group: com.stakater
     provider: stakater
     team: nordmart
@@ -326,7 +326,7 @@ spec:
 
   to:
     kind: Service
-    name: inventory
+    name: stakater-nordmart-inventory-31
     weight: 100
   wildcardPolicy: None
   tls:
@@ -355,19 +355,19 @@ apiVersion: "monitoring.coreos.com/v1"
 kind: ServiceMonitor
 metadata:
   labels:
-    app: inventory
-    appVersion: "IMAGE_TAG"
+    app: stakater-nordmart-inventory-31
+    appVersion: "SNAPSHOT-PR-31-e043e9b3"
     group: com.stakater
     provider: stakater
     team: nordmart
     chart: "application-0.0.29"
     release: "stakater-nordmart-inventory"
     heritage: "Helm"
-  name: inventory-svc-monitor
+  name: stakater-nordmart-inventory-31-svc-monitor
 spec:
   selector:
     matchLabels:
-      app: inventory
+      app: stakater-nordmart-inventory-31
   namespaceSelector:
     matchNames:
     - nordmart-pr
