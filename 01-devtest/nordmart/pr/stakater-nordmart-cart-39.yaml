@@ -5,7 +5,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-cart-39
-    appVersion: "SNAPSHOT-PR-39-f800064c"
+    appVersion: "SNAPSHOT-PR-39-28666515"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -27,7 +27,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-cart-39
-    appVersion: "SNAPSHOT-PR-39-f800064c"
+    appVersion: "SNAPSHOT-PR-39-28666515"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: stakater-nordmart-cart-39
-        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-39-f800064c"
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-39-28666515"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
