@@ -1,11 +1,26 @@
 ---
+# Source: helm/charts/application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: stakater-nordmart-cart-39
+    appVersion: "SNAPSHOT-PR-39-5b4985cb"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-cart"
+    heritage: "Helm"
+  name: stakater-nordmart-cart-39
+---
 # Source: helm/charts/application/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     app: stakater-nordmart-cart-39
-    appVersion: "SNAPSHOT-PR-39-28666515"
+    appVersion: "SNAPSHOT-PR-39-5b4985cb"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -27,7 +42,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-cart-39
-    appVersion: "SNAPSHOT-PR-39-28666515"
+    appVersion: "SNAPSHOT-PR-39-5b4985cb"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -52,7 +67,7 @@ spec:
     spec:
       containers:
       - name: stakater-nordmart-cart-39
-        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-39-28666515"
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-39-5b4985cb"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
