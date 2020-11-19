@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-review-15
-    appVersion: "SNAPSHOT-PR-15-3cad96c1"
+    appVersion: "SNAPSHOT-PR-15-ff1a9c94"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -53,7 +53,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-review-15
-    appVersion: "SNAPSHOT-PR-15-3cad96c1"
+    appVersion: "SNAPSHOT-PR-15-ff1a9c94"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -64,7 +64,6 @@ metadata:
 spec:
   selector:
     app: stakater-nordmart-review-15
-    app: review
   ports:
     - name: https
       port: 8080
@@ -100,7 +99,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-review-15
-    appVersion: "SNAPSHOT-PR-15-3cad96c1"
+    appVersion: "SNAPSHOT-PR-15-ff1a9c94"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -122,11 +121,10 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-review-15
-        app: review
     spec:
       containers:
       - name: stakater-nordmart-review-15
-        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-review:SNAPSHOT-PR-15-3cad96c1"
+        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-review:SNAPSHOT-PR-15-ff1a9c94"
         imagePullPolicy: IfNotPresent
         env:
           - name: DB_NAME
