@@ -1,8 +1,377 @@
 ---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: iam-postgresql
+  namespace: nordmart-dev
+spec:
+  encryptedData:
+    postgresql-password: AgAeygE/zWvHwnAg+z24ThLYn5XkMBvc2S7xOyhoIlNpLADE71WGmB7++S5K6gfPsH7WRracBVFrN+6bMRS6uKy/GcNnabsvzEtXr7154+uA5IyPm4w5+7VwlY6ZFVcPArp1/Mz69noApr8dnwh3pEkXKdNupSK2EUQtcX8iicpTDdi6oYcmMe0p1aYmgQymLPh+kodhJL8oBW/07UZAR1o5J8O19sLHduMyX7C9smveiixTs1pxS9lL3TGF8fUy6A0ngNCKBTWv95dZQaS9Nfk9Md2kDgE/JDV1VVIBwSy4jKloQpbT6nLdI/3XtBXmieHKxVPRNgBLYGfUKpkN9yYiv6C74uEJjAlD2XltmNwxJlW4PBnB93K2bGULFpX6D0lLwRo2dkPCR7dB549NtlfFzPDKZUFdELSY2E8PR0Sd6Eas7u1mNnauJGNkvtbP/D3/HP+667jo1cm6scBcE9jkCZXLGijgsClRgBz0G7fXVzj+t1+8BcWS/fUPj1xzx5dl/rMxF565v4EwB0qgISaKq6lrEROBOPyyE18+NwnMT5ZLj0nmPnLvW8guOoAy/my+k0pHiRuCw0wRQ5aPjySKWaZC7sfsGsYNX7QYMvEzOH37x5a3e3x3Hqpq+yVNMdiqVKDBS5z2dNssdhVySWXgjbzXQJSUQ6r5+axm2dWyKOVxvP4VOMKmotEFfx7b6ND/sBdFLjlFGPwKI+H4LzDBVg==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: iam-postgresql
+      namespace: nordmart-dev
+    type: Opaque
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: keycloak-secrets
+  namespace: nordmart-dev
+spec:
+  encryptedData:
+    password: AgCLeqUgyOgAwxyIeqiAQokj12LD2+Owz25guH/MxU7FcPk+f/L56tEtsq1QCHv2uvZt843lsnpr6Y+aFxnXTQE5Q1Lo9A7eRbC/wSwNsBhbN9ff7ngI7sGCWmHVTZ5mvAFX7mMbpr3/3jPFSIcFFQ/lAypqdUAJ3jzehA5O2ba9DZ8EENJntpEHU4/S0RObd3lVjd8z7KOg+2i0fJo6blZhL/06tMtm7pNJD2eSGuyzccQ7Btx5KdinNg9XB1YgaodOICGtlhQPqItnMayhvYkUrI3px4R6xWA1m3q7eejEiTqifdGA9henpEdZvCKXFnTlwpu9CfXWDd9HKXusO1N8CjW+ZfWtpk4WeHZ5Mcb+xHuRzR/FxM6KlsiPZBWJpHjzLH7d9ZUeAar213TH1pg5aoRKLyg3pOZfzMdsNGOdU85Sn+xDJ4mGtg2OL9ike+6Qw6wDHIh6++BassfbvUYrNfNBkrloFKKOrUQc+uOeb3RqiAAssPb1ao2GlIz/7rFLAM502OPB+0mM7k1ioPSf8FoaS9d6s3y3n1GIOO3L/hJiVU5lX4VjXYyBhcnc8Zq+3JP/unycAbpBNaSsh4Udm7WJx+U6kub9plqH7YWaWGXzcnYT19TeAzH6YAo9FGuC+HCbf1Auf6hzsbtO6K11x+MOezlcSzZFfZpThdUbSsXoPIhaIj0r7x0NFE1eSwpNFPc2K4Cr/F/qYtc=
+    username: AgBlGq63l2+ljYYk9CWVqEB2501qWwk3Wqs+a1ALReYLU6QUo73LA03EVUnAKWpfuluI6z+xDlmOmOYX1wTR1KaSAyPqet2mqL4jJtjIJ4RIBStiDqZ3IqfTEMVwg8DkW/tMo1nRbzC8HdBKKIlV2Ctjzduj5sIkE3hn5UdbG7e51Pfb6qTvp2ICdarjCTXYJfgaxAkbqC0eQLvZU2THV0WPCgmb0lfWM4R9yEUWOYOu61+yTxC/gAT7CNUzyYY1KDMyMAI9Gvbed37ly+Q93Hgl9jZ5JB/13XU+76eEeiCDLNFQpw8gsuQ0ny/oFzzn7jXD2W4lAqSstE6hLPTOi+eEJCAApsGk99VlI1OefiE9hl0nXywJwcbEUdgWhhqbexgPRy39TiHREAgoa44ncL31Z9TMniU8sK73/EJTRav/GgaXpPP3okhnfrIH2qPY98ejJpP1oS4Lnsju3zAbj1XKYi8agvTSSRK7W9mZKqAwmXb4XJmzOyjftRALH20rwA68/IZJLY+iZD8WX3zt/J4wJLROLAtoRXiCjurxSWV7PwooGsHNJW0QHdY/Q2z/5MxEqMe1M56pnwQ8fM2YMOZ9ROyJVi6IbFWgvqMejjyjN6BGs6fHkBIx6SEESYaKkewdUOex+hlqZ1uWXJgN/FUbR21Mqwjx5LaFXeUbslpep+utgcJz29Ox2RKKZeY4VkRuBP08SQ==
+  template:
+    metadata:
+      creationTimestamp: null
+      name: keycloak-secrets
+      namespace: nordmart-dev
+    type: Opaque
+---
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: iam
+  namespace: nordmart-dev
+spec:
+  releaseName: iam
+  chart:
+    repository: https://codecentric.github.io/helm-charts
+    name: keycloak
+    version: 9.1.0
+  values:
+    # Optionally override the fully qualified name
+    fullnameOverride: ""
+
+    # Optionally override the name
+    nameOverride: ""
+
+    # The number of replicas to create
+    replicas: 1
+
+    image:
+      # The Keycloak image repository
+      repository: registry.redhat.io/rh-sso-7/sso74-openshift-rhel8
+      # Overrides the Keycloak image tag whose default is the chart version
+      tag: "7.4"
+      # The Keycloak image pull policy
+      pullPolicy: IfNotPresent
+
+    # Mapping between IPs and hostnames that will be injected as entries in the Pod's hosts files
+    hostAliases: []
+
+    # Indicates whether information about services should be injected into Pod's environment variables, matching the syntax of Docker links
+    enableServiceLinks: true
+
+    # Pod management policy. One of `Parallel` or `OrderedReady`
+    podManagementPolicy: Parallel
+
+    # Pod restart policy. One of `Always`, `OnFailure`, or `Never`
+    restartPolicy: Always
+
+    serviceAccount:
+      # Specifies whether a ServiceAccount should be created
+      create: true
+      # The name of the service account to use.
+      # If not set and create is true, a name is generated using the fullname template
+      name: ""
+      # Additional annotations for the ServiceAccount
+      annotations: {}
+      # Additional labels for the ServiceAccount
+      labels: {}
+      # Image pull secrets that are attached to the ServiceAccount
+      imagePullSecrets: []
+
+    rbac:
+      create: true
+      rules: []
+
+    # SecurityContext for the entire Pod. Every container running in the Pod will inherit this SecurityContext. This might be relevant when other components of the environment inject additional containers into running Pods (service meshes are the most prominent example for this)
+    podSecurityContext: {}
+
+    # SecurityContext for the Keycloak container
+    securityContext:
+      runAsUser: 185
+      runAsNonRoot: true
+
+    # Additional init containers, e. g. for providing custom themes
+    extraInitContainers: ""
+
+    # Additional sidecar containers, e. g. for a database proxy, such as Google's cloudsql-proxy
+    extraContainers: ""
+
+    # Lifecycle hooks for the Keycloak container
+    lifecycleHooks: |
+      #  postStart:
+      #    exec:
+      #      command:
+      #        - /bin/sh
+      #        - -c
+      #        - ls
+
+    # Termination grace period in seconds for Keycloak shutdown. Clusters with a large cache might need to extend this to give Infinispan more time to rebalance
+    terminationGracePeriodSeconds: 60
+
+    # The internal Kubernetes cluster domain
+    clusterDomain: cluster.local
+
+    ## Overrides the default entrypoint of the Keycloak container
+    command:
+      - /bin/sh
+      - -c
+    ## Overrides the default args for the Keycloak container
+    args:
+      - ${JBOSS_HOME}/bin/openshift-launch.sh
+
+    # Additional environment variables for Keycloak
+    extraEnv: |-
+      - name: SSO_ADMIN_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: keycloak-secrets
+            key: username
+      - name: SSO_ADMIN_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: keycloak-secrets
+            key: password
+      - name: KEYCLOAK_LOGLEVEL
+        value: DEBUG
+      - name: SSO_IMPORT_FILE
+        value: /opt/eap/standalone/configuration/stakater-realm.json
+
+    # Additional environment variables for Keycloak mapped from Secret or ConfigMap
+    extraEnvFrom: ""
+
+    #  Pod priority class name
+    priorityClassName: ""
+
+    # Pod affinity
+    affinity: ""
+
+    # Node labels for Pod assignment
+    nodeSelector: {}
+
+    # Node taints to tolerate
+    tolerations: []
+
+    # Additional Pod labels
+    podLabels: {}
+
+    # Additional Pod annotations
+    podAnnotations:
+      secret.reloader.stakater.com/reload: "keycloak-config,keycloak-secrets"
+
+    # Liveness probe configuration
+    livenessProbe: |
+      httpGet:
+        path: /auth/
+        port: http
+      initialDelaySeconds: 300
+      timeoutSeconds: 5
+    
+    # Readiness probe configuration
+    readinessProbe: |
+      httpGet:
+        path: /auth/realms/master
+        port: http
+      initialDelaySeconds: 30
+      timeoutSeconds: 1
+
+    # Pod resource requests and limits
+    resources: {}
+      # requests:
+      #   cpu: "500m"
+      #   memory: "1024Mi"
+      # limits:
+      #   cpu: "500m"
+      #   memory: "1024Mi"
+
+    # Startup scripts to run before Keycloak starts up
+    startupScripts:
+      # WildFly CLI script for configuring the node-identifier
+      keycloak.cli: |
+        {{- .Files.Get "scripts/keycloak.cli" }}
+      # mystartup.sh: |
+      #   #!/bin/sh
+      #
+      # echo 'Hello from my custom startup script!'
+
+    # Add additional volumes, e. g. for custom themes
+    extraVolumes: |-
+      - name: keycloak-config
+        secret:
+          secretName: keycloak-config
+          items:
+          - key: stakater-realm.json
+            path: stakater-realm.json
+    
+    # Add additional volumes mounts, e. g. for custom themes
+    extraVolumeMounts: |-
+      - name: keycloak-config
+        mountPath: /opt/eap/standalone/configuration/stakater-realm.json
+        subPath: stakater-realm.json
+
+    # Add additional ports, e. g. for admin console or exposing JGroups ports
+    extraPorts: []
+
+    # Pod disruption budget
+    podDisruptionBudget: {}
+    #  maxUnavailable: 1
+    #  minAvailable: 1
+
+    # Annotations for the StatefulSet
+    statefulsetAnnotations: {}
+
+    # Additional labels for the StatefulSet
+    statefulsetLabels: {}
+
+    # Configuration for secrets that should be created
+    secrets: {}
+
+    service:
+      # Annotations for headless and HTTP Services
+      annotations: {}
+      # Additional labels for headless and HTTP Services
+      labels: {}
+      # key: value
+      # The Service type
+      type: ClusterIP
+      # Optional IP for the load balancer. Used for services of type LoadBalancer only
+      loadBalancerIP: ""
+      # The http Service port
+      httpPort: 80
+      # The HTTP Service node port if type is NodePort
+      httpNodePort: null
+      # The HTTPS Service port
+      httpsPort: 8443
+      # The HTTPS Service node port if type is NodePort
+      httpsNodePort: null
+      # The WildFly management Service port
+      httpManagementPort: 9990
+      # The WildFly management Service node port if type is NodePort
+      httpManagementNodePort: null
+      # Additional Service ports, e. g. for custom admin console
+      extraPorts: []
+
+    ingress:
+      # If `true`, an Ingress is created
+      enabled: false
+
+    route:
+      # If `true`, an OpenShift Route is created
+      enabled: true
+      # Path for the Route
+      path: /
+      # Route annotations
+      annotations: {}
+      # Additional Route labels
+      labels:
+        router: default
+        # router: stakater-cloud-dev-router
+      # Host name for the Route
+      host: ""
+      # TLS configuration
+      tls:
+        # If `true`, TLS is enabled for the Route
+        enabled: true
+        # Insecure edge termination policy of the Route. Can be `None`, `Redirect`, or `Allow`
+        insecureEdgeTerminationPolicy: Redirect
+        # TLS termination of the route. Can be `edge`, `passthrough`, or `reencrypt`
+        termination: edge
+
+    pgchecker:
+      image:
+        # Docker image used to check Postgresql readiness at startup
+        repository: docker.io/busybox
+        # Image tag for the pgchecker image
+        tag: 1.32
+        # Image pull policy for the pgchecker image
+        pullPolicy: IfNotPresent
+      # SecurityContext for the pgchecker container
+      securityContext:
+        runAsUser: 185
+        runAsGroup: 185
+        runAsNonRoot: true
+      # Resource requests and limits for the pgchecker container
+      resources:
+        requests:
+          cpu: "10m"
+          memory: "16Mi"
+        limits:
+          cpu: "10m"
+          memory: "16Mi"
+
+    postgresql:
+      enabled: true
+      postgresqlUsername: keycloak
+      postgresqlDatabase: keycloak
+      existingSecret: iam-postgresql
+      serviceAccount:
+        enabled: true
+        name: iam-keycloak
+
+    serviceMonitor:
+      # If `true`, a ServiceMonitor resource for the prometheus-operator is created
+      enabled: true
+      # Optionally sets a target namespace in which to deploy the ServiceMonitor resource
+      namespace: ""
+      # Annotations for the ServiceMonitor
+      annotations: {}
+      # Additional labels for the ServiceMonitor
+      labels: {}
+      # Interval at which Prometheus scrapes metrics
+      interval: 10s
+      # Timeout for scraping
+      scrapeTimeout: 10s
+      # The path at which metrics are served
+      path: /metrics
+      # The Service port at which metrics are served
+      port: http-management
+
+    prometheusRule:
+      # If `true`, a PrometheusRule resource for the prometheus-operator is created
+      enabled: true
+      # Annotations for the PrometheusRule
+      annotations: {}
+      # Additional labels for the PrometheusRule
+      labels: {}
+      # List of rules for Prometheus
+      rules:
+      - alert: keycloak-IngressHigh5xxRate
+        annotations:
+          message: The percentage of 5xx errors for keycloak over the last 5 minutes is over 1%.
+        expr: |
+          (
+            sum(
+              rate(
+                nginx_ingress_controller_response_duration_seconds_count{exported_namespace="mynamespace",ingress="stakater-security",status=~"5[0-9]{2}"}[1m]
+              )
+            )
+            /
+            sum(
+              rate(
+                nginx_ingress_controller_response_duration_seconds_count{exported_namespace="mynamespace",ingress="stakater-security"}[1m]
+              )
+            )
+          ) * 100 > 1
+        for: 5m
+        labels:
+          severity: warning
+
+    test:
+      # If `true`, test resources are created
+      enabled: false
+
+---
 apiVersion: security.openshift.io/v1
 kind: SecurityContextConstraints
 metadata:
-  name: nordmart-dev-keycloak-scc
+  name: iam-scc
 allowHostDirVolumePlugin: true
 allowHostIPC: false
 allowHostNetwork: false
@@ -22,431 +391,9 @@ runAsUser:
 seLinuxContext:
   type: RunAsAny
 users:
-  - system:serviceaccount:nordmart-dev:stakater-nordmart-keycl
+  - system:serviceaccount:nordmart-dev:iam-keycloak
 volumes:
   - "*"
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    category: serviceaccount
-  name: stakater-nordmart-keycl
-  namespace: nordmart-dev
----
-# Source: keycloak/templates/configmap-sh.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: stakater-nordmart-keycl-sh
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    category: configmap
-data:
-  keycloak.sh: |
-    #!/usr/bin/env bash
-
-    set -o errexit
-    set -o nounset
-
-    exec /opt/jboss/tools/docker-entrypoint.sh -b 0.0.0.0 -Djgroups.bind_addr=global -Dkeycloak.migration.action=import -Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=/opt/jboss/keycloak/standalone/configuration/import/stakater-realm.json -Dkeycloak.migration.strategy=IGNORE_EXISTING -c standalone.xml
-
----
-# Source: keycloak/templates/configmap-startup.yaml
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: stakater-nordmart-keycl-startup
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    category: configmap
-data:
-  keycloak.cli: |
-    embed-server --std-out=echo
-    batch
-    ## Sets the node identifier to the node name (= pod name). Node identifiers have to be unique. They can have a
-    ## maximum length of 23 characters. Thus, the chart's fullname template truncates its length accordingly.
-    /subsystem=transactions:write-attribute(name=node-identifier, value=${jboss.node.name})
-
-
-    # Allow log level to be configured via environment variable
-    /subsystem=logging/console-handler=CONSOLE:write-attribute(name=level, value=${env.WILDFLY_LOGLEVEL:INFO})
-    /subsystem=logging/root-logger=ROOT:write-attribute(name=level, value=${env.WILDFLY_LOGLEVEL:INFO})
-
-    # Add dedicated eventsListener config element to allow configuring elements.
-    /subsystem=keycloak-server/spi=eventsListener:add()
-    /subsystem=keycloak-server/spi=eventsListener/provider=jboss-logging:add(enabled=true)
-
-    # Propagate success events to INFO instead of DEBUG, to expose successful logins for log analysis
-    /subsystem=keycloak-server/spi=eventsListener/provider=jboss-logging:write-attribute(name=properties.success-level,value=info)
-    /subsystem=keycloak-server/spi=eventsListener/provider=jboss-logging:write-attribute(name=properties.error-level,value=warn)
-
-
-    # Configure datasource to use explicit query timeout in seconds
-    /subsystem=datasources/data-source=KeycloakDS/:write-attribute(name=query-timeout,value=${env.DB_QUERY_TIMEOUT:300})
-
-    # Configure datasource to connection before use
-    /subsystem=datasources/data-source=KeycloakDS/:write-attribute(name=validate-on-match,value=${env.DB_VALIDATE_ON_MATCH:true})
-
-    # Configure datasource to try all other connections before failing
-    /subsystem=datasources/data-source=KeycloakDS/:write-attribute(name=use-fast-fail,value=${env.DB_USE_CAST_FAIL:false})
-
-
-
-    run-batch
-    stop-embedded-server
----
-# Source: keycloak/templates/test/configmap-test.yaml
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: stakater-nordmart-keycl-test
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    category: configmap
-data:
-  test.py: |
-    import os
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions
-    from urllib.parse import urlparse
-
-    print('Creating PhantomJS driver...')
-    driver = webdriver.PhantomJS(service_log_path='/tmp/ghostdriver.log')
-
-    base_url = 'http://stakater-nordmart-keycl-http'
-
-    print('Opening Keycloak...')
-    driver.get('{0}/auth/admin/'.format(base_url))
-
-    username = os.environ['KEYCLOAK_USER']
-    password = os.environ['KEYCLOAK_PASSWORD']
-
-    username_input = WebDriverWait(driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "username")))
-    password_input = WebDriverWait(driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "password")))
-    login_button = WebDriverWait(driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "kc-login")))
-
-    print('Entering username...')
-    username_input.send_keys(username)
-
-    print('Entering password...')
-    password_input.send_keys(password)
-
-    print('Clicking login button...')
-    login_button.click()
-
-    current_url = urlparse(driver.current_url)
-    expected_url = urlparse('{0}/auth/admin/master/console/'.format(base_url))
-
-    print('Current URL: {0}'.format(current_url))
-    print('Expected URL: {0}'.format(expected_url))
-
-    if current_url.path != expected_url.path:
-        print('Login failed. Current url is not expected url')
-        exit(1)
-
-    print('URLs match. Login successful.')
-
-    driver.quit()
-
----
-# Source: keycloak/templates/service-headless.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: stakater-nordmart-keycl-headless
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-spec:
-  type: ClusterIP
-  clusterIP: None
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: keycloak
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-
----
-# Source: keycloak/templates/service-http.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: stakater-nordmart-keycl-http
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    expose: "true"
-spec:
-  type: ClusterIP
-  ports:
-    - name: http
-      port: 80
-      targetPort: http
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: keycloak
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-
----
-# Source: keycloak/templates/test/pod-test.yaml
-
-apiVersion: v1
-kind: Pod
-metadata:
-  name: "stakater-nordmart-keycl-test-zkk2v"
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-    role: test
-    category: tool
-  annotations:
-    "helm.sh/hook": test-success
-spec:
-  securityContext:
-    fsGroup: 1000
-
-  containers:
-    - name: keycloak-test
-      image: "unguiculus/docker-python3-phantomjs-selenium:v1"
-      imagePullPolicy: IfNotPresent
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-
-      command:
-        - python3
-        - /tests/test.py
-      env:
-        - name: KEYCLOAK_USER
-          value: stakater
-        - name: KEYCLOAK_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: keycloak-secrets
-              key: password
-      volumeMounts:
-        - name: tests
-          mountPath: /tests
-  volumes:
-    - name: tests
-      configMap:
-        name: stakater-nordmart-keycl-test
-  restartPolicy: Never
-
----
-# Source: keycloak/templates/statefulset.yaml
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: stakater-nordmart-keycl
-  namespace: nordmart-dev
-  labels:
-    app.kubernetes.io/name: keycloak
-    helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: stakater-nordmart-keycloak
-    app.kubernetes.io/managed-by: Tiller
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: keycloak
-      app.kubernetes.io/instance: stakater-nordmart-keycloak
-  replicas: 1
-  serviceName: stakater-nordmart-keycl-headless
-  podManagementPolicy: Parallel
-  updateStrategy:
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: keycloak
-        app.kubernetes.io/instance: stakater-nordmart-keycloak
-        category: tool
-      annotations:
-        checksum/config-sh: 583368041190243b2cdf4e216f1896f2af1f99a604a8ce955b2f6e5565fcc645
-        checksum/config-startup: 9a25f6b64bf35395cda7f9cc7f8780f511e4e9934c245ac6a14400b72310e58e
-        fluentdConfiguration: |
-          [
-              {
-                  "containers":
-                  [
-                      {
-                          "expression": "/^\\S*\\s-\\s-\\s\\[(?<time>\\S*)[\\S\\s]*\\]\\s(?<message>[\\S\\s]*)/",
-                          "expressionFirstLine": "/^\\:\\:f{4}:[0-9]+.[0-9]+\\.[0-9]+\\.[0-9]+/",
-                          "timeFormat": "%d/%b/%Y:%H:%M:%S",
-                          "containerName": "keycloak"
-                      }
-                  ]
-              }
-          ]
-        secret.reloader.stakater.com/reload: keycloak-config,keycloak-secrets
-
-    spec:
-      restartPolicy: Always
-      serviceAccountName: stakater-nordmart-keycl
-      securityContext:
-        fsGroup: 1000
-
-      containers:
-        - name: keycloak
-          image: "jboss/keycloak:8.0.1"
-          imagePullPolicy: IfNotPresent
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-
-          command:
-            - /scripts/keycloak.sh
-          env:
-            - name: KEYCLOAK_USER
-              value: stakater
-            - name: KEYCLOAK_PASSWORD_FILE
-              value: /secrets/password
-
-            - name: DB_VENDOR
-              value: "postgres"
-            - name: DB_ADDR
-              value: "stakater-nordmart-postgresql"
-            - name: DB_PORT
-              value: "5432"
-            - name: DB_DATABASE
-              value: "keycloak-db"
-            - name: DB_USER
-              value: "keycloak"
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: keycloak-secrets
-                  key: "db.password"
-            - name: OPERATING_MODE
-              value: standalone
-            - name: HIDE_OPENSHIFT_BTN
-              value: "true"
-            - name: HIDE_GITHUB_BTN
-              value: "false"
-            - name: PROXY_ADDRESS_FORWARDING # Why? https://www.keycloak.org/docs/3.4/server_installation/index.html#identifying-client-ip-addresses
-              value: "true"
-            - name: K8S_API_SERVER
-              value: http://kubernetes
-            - name: AUTH_URL
-              value: http://auth
-            - name: KEYCLOAK_URL
-              value: http://keycloak
-
-          volumeMounts:
-            - name: sh
-              mountPath: /scripts
-              readOnly: true
-            - name: secrets
-              mountPath: /secrets
-              readOnly: true
-            - name: startup
-              mountPath: /opt/jboss/startup-scripts
-              readOnly: true
-            - name: keycloak-config
-              mountPath: /opt/jboss/keycloak/standalone/configuration/import/stakater-realm.json
-              subPath: stakater-realm.json
-            - name: data
-              mountPath: /opt/jboss/keycloak/standalone/deployments
-
-          ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /auth/
-              port: http
-            initialDelaySeconds: 120
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /auth/realms/master
-              port: http
-            initialDelaySeconds: 30
-            timeoutSeconds: 1
-          resources:
-            {}
-
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app.kubernetes.io/name: keycloak
-                  app.kubernetes.io/instance: stakater-nordmart-keycloak
-                matchExpressions:
-                  - key: role
-                    operator: NotIn
-                    values:
-                      - test
-              topologyKey: kubernetes.io/hostname
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              podAffinityTerm:
-                labelSelector:
-                  matchLabels:
-                    app.kubernetes.io/name: keycloak
-                    app.kubernetes.io/instance: stakater-nordmart-keycloak
-                  matchExpressions:
-                    - key: role
-                      operator: NotIn
-                      values:
-                        - test
-                topologyKey: failure-domain.beta.kubernetes.io/zone
-
-      terminationGracePeriodSeconds: 60
-      volumes:
-        - name: sh
-          configMap:
-            name: stakater-nordmart-keycl-sh
-            defaultMode: 0555
-        - name: secrets
-          secret:
-            secretName: keycloak-secrets
-        - name: startup
-          configMap:
-            name: stakater-nordmart-keycl-startup
-            defaultMode: 0555
-        - name: keycloak-config
-          secret:
-            secretName: keycloak-config
-            items:
-              - key: stakater-realm.json
-                path: stakater-realm.json
-        - name: data
-          emptyDir: {}
 ---
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
@@ -463,25 +410,5 @@ spec:
       labels:
         category: secret
       name: keycloak-config
-      namespace: nordmart-dev
-    type: Opaque
----
-apiVersion: bitnami.com/v1alpha1
-kind: SealedSecret
-metadata:
-  creationTimestamp: null
-  name: keycloak-secrets
-  namespace: nordmart-dev
-spec:
-  encryptedData:
-    db.password: AgCYrq2VWEWKcX0t4FkAced6auOsKVtsMK/XiyEN4DrUWBo9THz5fKYmoHSEx/O+CtzmeJ4QmCnIqeTr9yAj09FZ1+qnP2P5Qdkj67if8YNzRPuIvBOsO39qQsOXh+32PH5o2VnVA3Rfw1I/mMGIGLdk8i0kWdHrQG3IgDNCU043E7i2qtQ1Fd/DOfO+I7HwZG8QvMmTL2FZwcEH0c1iYkUqrjwFO3EtVeJdlZdlloVuaTZUraVyh4bPwM/fI8BRIqwwXQLcUCM1UcAKdx3pncCySCYsUQMo47sZ9/VBlonXOddGXNpq59I6Vpkv7qsLyAprHZDE9ZUQMgSDruRt5CPU01DWP0GwzZlxC+3E6i7kYTjn5I2cM48PWWV7dXniBfrVOvmbt7WhZdF50qOrKIyqxn8ZsKcd3QggNRnFOFXmw2lmzEBmwxRkMvowIymhtueI3J5NNfiKccHQQZ8NLfowXNI18iUNncvdpK8u4E+CHts/iVT/PQBMu7pjAJp6XbgMeTT6DVN8uDR2WiAY3OHEJy93uvzGDZV9zKwl5wgAtIvSMz5V8WcaAfQPApscTlgxw/uLwUEL9H5jWYwgEytvn6IMKCY7qwl8JiwfeBd40UIczCfFfF+nVZNW7l2UPcXS2RFzakNCAOQvpfLXSjvb0OyQfGys/chHMFmQXMF0fm1ECFXFexTNHxqTOzIgcKGHHdkpitFhrg4Y
-    db.user: AgA3PbujjhfoR6LHoJE6g1lCe+9in0nAjqPNc9ULMJded2o3yWlBNQcnBMoE5Dxg8lX7tzSQYntVgkJtQJYKWMycjhI+4ogmYbnotmeVXK4oOV4o3G65XQpKus1vnaJRDIk2Tax4dmBEsidEIGcA2gOn85wp6jenkhTr7UH99BHpZnxGzOYZDJ50qofoDqAXmgPXydG5y7NNo5k6gZ8Ui2JWzjKHfwDXm4f5B6Sb/IcfCQwCf+mgZkch07CD4AD1kyow7I05ZCpCBrHo/wcD7PrEHMAvAFzat3y7pzulrsX1w6u1asATmESTE5XK0lTMHVtmA0ppg2YzY3gyP1kiM/ljOg+MqWDfvzU+4vIvfdOUszg9ENfCrRSoPq3cj0vTKjJEsiCAzLBFSGwXUC9gi9mHatTvdP+R/TZwAra2Su/6gT2VheXRqkHaNgOy7j8mXK3GCbSn+LWotkjqWe1kb8c56VdCY7hnxovTdCYf4xka+1qXOioN9o1PHt+Yfo406xeCoZ7uUSPDwNj4vdJX5yBz1n3dTP60NltSehC0bRTx8tAkeVB/aCtivsNnnDudULPNw6h7KK4jSEvUHWaiSMDvxpoj18viU5hz4zrbQ+X0NsqlDNNMYxXavRUZlNRfo5Fb+MgiRJTTY5s1inN3CZJ9jPodZt3VtNjZIfLLELLaQp15suBz/iZTAYxyyGj/Uz1BZklY0A==
-    password: AgAiMr1nxJQtb3WB4aUNk45wUYhwVl4RFLIO2Fw6zkUq8k7to4rfryOynhvDMxhkqcIGOxeKeKYpBw/pUnVpg4ZUq2FpgO2DNONWWuoaWsHWsHRyjfmXCK/dIQLvVkU04M/2MwPq596pg1zE9V6snZCckjJ+Xb5UTUWGF6pf0aSfHZR//186xR6yqfn4luzBMJJRVGJzo9isdIEZcIgyphoKqhNkIQKhT29Tq0IR4S5ea7HbswzADGGrBmBJ10hU65ZV/LjvaU6CV+QEeXExfiiqRXPuj1SO7O02jihU2RJ69Cg1vq1g6kvAg1JeOEWMYQq180j4GeLuD1mJvP2FJtM/Nz43DFaXJ3kLQGGd7ZvMFgqzSX4Y7L2cXgebSKptjzl+aWSANn9Wgy5BNbTeYv6xHt4I/BQozgoZ9tQ5cS0Rn+f7A1pGP1rriIZKwtHLOOI9tfavfc4aHJA4Hr8PGcJ5IW2X7+t8QUYl4hqlpfEmAR3dMZKo/qGuIH/PL8i2Tj4Wi1hRfIG0TF54JwIT0OBz7PhTPP6FYe12KxLY5N26IT6ezsNpz9O7yEkLHmIP25EWautHqLsUMj4oyYmrV9TRf+RY1E5itQTsEqI7hplSiSKhfdvFjuU9V4P3sPjrBekJ9RfdL+5O6AT5JJWamFLamQdQpMyXYzZnb12i1DxrIQyJ6II2MNuIYcSxeAUoKHbI1bv9jpa2kQ==
-  template:
-    metadata:
-      creationTimestamp: null
-      labels:
-        category: secret
-      name: keycloak-secrets
       namespace: nordmart-dev
     type: Opaque
