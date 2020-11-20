@@ -3,12 +3,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NAMESPACE_NAME-keycl-sh
+  name: stakater-nordmart-keycl-sh
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
     category: configmap
 data:
@@ -25,12 +25,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NAMESPACE_NAME-keycl-startup
+  name: stakater-nordmart-keycl-startup
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
     category: configmap
 data:
@@ -74,12 +74,12 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: NAMESPACE_NAME-keycl-test
+  name: stakater-nordmart-keycl-test
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
     category: configmap
 data:
@@ -94,7 +94,7 @@ data:
     print('Creating PhantomJS driver...')
     driver = webdriver.PhantomJS(service_log_path='/tmp/ghostdriver.log')
 
-    base_url = 'http://NAMESPACE_NAME-keycl-http'
+    base_url = 'http://stakater-nordmart-keycl-http'
 
     print('Opening Keycloak...')
     driver.get('{0}/auth/admin/'.format(base_url))
@@ -134,12 +134,12 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: NAMESPACE_NAME-keycl-headless
+  name: stakater-nordmart-keycl-headless
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
 spec:
   type: ClusterIP
@@ -151,19 +151,19 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: keycloak
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
 
 ---
 # Source: keycloak/templates/service-http.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: NAMESPACE_NAME-keycl-http
+  name: stakater-nordmart-keycl-http
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
     expose: "true"
 spec:
@@ -175,7 +175,7 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: keycloak
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
 
 ---
 # Source: keycloak/templates/test/pod-test.yaml
@@ -183,12 +183,12 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "NAMESPACE_NAME-keycl-test-zkk2v"
+  name: "stakater-nordmart-keycl-test-zkk2v"
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
     role: test
     category: tool
@@ -223,7 +223,7 @@ spec:
   volumes:
     - name: tests
       configMap:
-        name: NAMESPACE_NAME-keycl-test
+        name: stakater-nordmart-keycl-test
   restartPolicy: Never
 
 ---
@@ -231,20 +231,20 @@ spec:
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: NAMESPACE_NAME-keycl
+  name: stakater-nordmart-keycl
   namespace: nordmart-dev
   labels:
     app.kubernetes.io/name: keycloak
     helm.sh/chart: keycloak-5.1.7
-    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
     app.kubernetes.io/managed-by: Tiller
 spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: keycloak
-      app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+      app.kubernetes.io/instance: stakater-nordmart-keycloak
   replicas: 1
-  serviceName: NAMESPACE_NAME-keycl-headless
+  serviceName: stakater-nordmart-keycl-headless
   podManagementPolicy: Parallel
   updateStrategy:
     type: RollingUpdate
@@ -252,7 +252,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: keycloak
-        app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+        app.kubernetes.io/instance: stakater-nordmart-keycloak
         category: tool
       annotations:
         checksum/config-sh: 583368041190243b2cdf4e216f1896f2af1f99a604a8ce955b2f6e5565fcc645
@@ -298,7 +298,7 @@ spec:
             - name: DB_VENDOR
               value: "postgres"
             - name: DB_ADDR
-              value: "NAMESPACE_NAME-postgresql"
+              value: "stakater-nordmart-postgresql"
             - name: DB_PORT
               value: "5432"
             - name: DB_DATABASE
@@ -366,7 +366,7 @@ spec:
             - labelSelector:
                 matchLabels:
                   app.kubernetes.io/name: keycloak
-                  app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+                  app.kubernetes.io/instance: stakater-nordmart-keycloak
                 matchExpressions:
                   - key: role
                     operator: NotIn
@@ -379,7 +379,7 @@ spec:
                 labelSelector:
                   matchLabels:
                     app.kubernetes.io/name: keycloak
-                    app.kubernetes.io/instance: NAMESPACE_NAME-keycloak
+                    app.kubernetes.io/instance: stakater-nordmart-keycloak
                   matchExpressions:
                     - key: role
                       operator: NotIn
@@ -391,14 +391,14 @@ spec:
       volumes:
         - name: sh
           configMap:
-            name: NAMESPACE_NAME-keycl-sh
+            name: stakater-nordmart-keycl-sh
             defaultMode: 0555
         - name: secrets
           secret:
             secretName: keycloak-secrets
         - name: startup
           configMap:
-            name: NAMESPACE_NAME-keycl-startup
+            name: stakater-nordmart-keycl-startup
             defaultMode: 0555
         - name: keycloak-config
           secret:
