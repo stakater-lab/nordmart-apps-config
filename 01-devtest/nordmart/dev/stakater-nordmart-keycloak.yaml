@@ -1,4 +1,43 @@
 ---
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: nordmart-dev-keycloak-scc
+allowHostDirVolumePlugin: true
+allowHostIPC: false
+allowHostNetwork: false
+allowHostPID: false
+allowHostPorts: false
+allowPrivilegeEscalation: false
+allowPrivilegedContainer: false
+defaultAddCapabilities: null
+priority: null
+readOnlyRootFilesystem: false
+requiredDropCapabilities: null
+allowedCapabilities: null
+fsGroup:
+  type: RunAsAny
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+users:
+  - system:serviceaccount:nordmart-dev:stakater-nordmart-keycl
+volumes:
+  - "*"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/name: keycloak
+    helm.sh/chart: keycloak-5.1.7
+    app.kubernetes.io/instance: stakater-nordmart-keycloak
+    app.kubernetes.io/managed-by: Tiller
+    category: serviceaccount
+  name: stakater-nordmart-keycl
+  namespace: nordmart-dev
+---
 # Source: keycloak/templates/configmap-sh.yaml
 apiVersion: v1
 kind: ConfigMap
@@ -275,7 +314,7 @@ spec:
 
     spec:
       restartPolicy: Always
-      serviceAccountName: default
+      serviceAccountName: stakater-nordmart-keycl
       securityContext:
         fsGroup: 1000
 
