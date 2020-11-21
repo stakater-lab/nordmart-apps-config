@@ -1,33 +1,36 @@
+# Red Hat Integration - AMQ Streams
+# https://access.redhat.com/documentation/en-us/red_hat_amq/7.7/html-single/using_amq_streams_on_openshift/index#assembly-configuring-kafka-broker-listeners-deployment-configuration-kafka
 apiVersion: kafka.strimzi.io/v1beta1
 kind: Kafka
 metadata:
-  name: kafka-cluster
+  name: nordmart
   namespace: nordmart-dev
 spec:
   kafka:
-    version: 2.6.0
-    replicas: 1
-    listeners:
-      - name: plain
-        port: 9092
-        type: internal
-        tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
-
     config:
-      offsets.topic.replication.factor: 1
-      transaction.state.log.replication.factor: 1
-      transaction.state.log.min.isr: 1
-      log.message.format.version: "2.4"
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      log.message.format.version: '2.5'
+    version: 2.5.0
     storage:
-      type: ephemeral
-  zookeeper:
-    replicas: 1
-    storage:
-      type: ephemeral
+      size: '30'
+      deleteClaim: true
+      class: stakater
+      type: persistent-claim
+    replicas: 3
+    listeners:
+      # A plain (unencrypted) listener without authentication:
+      plain: {}
   entityOperator:
-    topicOperator: {}
-    userOperator: {}
+    topicOperator:
+      reconciliationIntervalSeconds: 90
+    userOperator:
+      reconciliationIntervalSeconds: 120
+  zookeeper:
+    storage:
+      class: stakater
+      deleteClaim: true
+      size: '30'
+      type: persistent-claim
+    replicas: 3
