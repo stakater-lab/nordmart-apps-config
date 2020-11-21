@@ -14,7 +14,7 @@ spec:
       log.message.format.version: '2.5'
     version: 2.5.0
     storage:
-      size: '30'
+      size: '30Gi'
       deleteClaim: true
       class: stakater
       type: persistent-claim
@@ -31,6 +31,6 @@ spec:
     storage:
       class: stakater
       deleteClaim: true
-      size: '30'
+      size: '30Gi'
       type: persistent-claim
     replicas: 3
