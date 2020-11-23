@@ -371,7 +371,7 @@ spec:
 apiVersion: security.openshift.io/v1
 kind: SecurityContextConstraints
 metadata:
-  name: iam-scc
+  name: nordmart-dev-iam-scc
 allowHostDirVolumePlugin: true
 allowHostIPC: false
 allowHostNetwork: false
