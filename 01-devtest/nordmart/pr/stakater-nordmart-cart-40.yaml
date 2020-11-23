@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-8a16f5ac"
+    appVersion: "SNAPSHOT-PR-40-e64cb681"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-8a16f5ac"
+    appVersion: "SNAPSHOT-PR-40-e64cb681"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -42,7 +42,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-8a16f5ac"
+    appVersion: "SNAPSHOT-PR-40-e64cb681"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -69,7 +69,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-cart-40
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-40-8a16f5ac"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-40-e64cb681"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
@@ -89,7 +89,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          initialDelaySeconds: 10
+          initialDelaySeconds: 90
           httpGet:
             path: /health
             port: 8080
@@ -98,7 +98,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          initialDelaySeconds: 10
+          initialDelaySeconds: 90
           httpGet:
             path: /health
             port: 8080
