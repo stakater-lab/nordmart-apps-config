@@ -85,7 +85,6 @@ metadata:
 spec:
   selector:
     app: catalog
-    app: catalog
   ports:
     - name: https
       port: 8080
@@ -144,11 +143,12 @@ spec:
     metadata:
       labels:
         app: catalog
-        app: catalog
-    spec:
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
       containers:
       - name: catalog
-        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-catalog:v0.0.26"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-catalog:v0.0.26"
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_USER
@@ -174,7 +174,7 @@ spec:
           - name: KEYCLOAK_CLIENT_SECRET_KEY
             value: 7672aea2-81ff-4aa2-affe-daf3bad10334
           - name: KAFKA_ADDRESS
-            value: kafka-cluster-kafka-bootstrap.nordmart-dev.svc.cluster.local:9092
+            value: nordmart-kafka-bootstrap:9092
           - name: JAEGER_ENDPOINT
             value: http://jaeger-collector.istio-system:14268/api/traces          
         livenessProbe:
