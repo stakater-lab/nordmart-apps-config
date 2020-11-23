@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-web-48
-    appVersion: "SNAPSHOT-PR-48-4615a63e"
+    appVersion: "SNAPSHOT-PR-48-bd375467"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-web-48
-    appVersion: "SNAPSHOT-PR-48-4615a63e"
+    appVersion: "SNAPSHOT-PR-48-bd375467"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -43,7 +43,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-web-48
-    appVersion: "SNAPSHOT-PR-48-4615a63e"
+    appVersion: "SNAPSHOT-PR-48-bd375467"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -70,15 +70,15 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-web-48
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-web:SNAPSHOT-PR-48-4615a63e"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-web:SNAPSHOT-PR-48-bd375467"
         imagePullPolicy: IfNotPresent
         env:
           - name: PORT
             value: "4200"
           - name: SECURE_GW_ENDPOINT
-            value: https://gateway-NAMESPACE_NAME.DOMAIN
+            value: https://gateway-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud
           - name: SSO_URL
-            value: https://keycloak-NAMESPACE_NAME.DOMAIN/auth
+            value: https://keycloak-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud/auth
           - name: SSO_REALM
             value: nordmart
           - name: SSO_CLIENT_ID
@@ -119,7 +119,7 @@ metadata:
   name: stakater-nordmart-web-48
   labels:
     app: stakater-nordmart-web-48
-    appVersion: "SNAPSHOT-PR-48-4615a63e"
+    appVersion: "SNAPSHOT-PR-48-bd375467"
     group: com.stakater.platform
     provider: stakater
     team: stakater
