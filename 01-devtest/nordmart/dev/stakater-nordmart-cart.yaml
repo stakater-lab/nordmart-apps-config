@@ -64,10 +64,12 @@ spec:
     metadata:
       labels:
         app: cart
-    spec:
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
       containers:
       - name: cart
-        image: "nexus.openshift-stakater-nexus.svc.cluster.local:5003/repository/docker/stakater-nordmart-cart:v0.0.34"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-cart:v0.0.34"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
@@ -87,7 +89,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          initialDelaySeconds: 10
+          initialDelaySeconds: 90
           httpGet:
             path: /health
             port: 8080
@@ -96,7 +98,7 @@ spec:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 1
-          initialDelaySeconds: 10
+          initialDelaySeconds: 90
           httpGet:
             path: /health
             port: 8080
