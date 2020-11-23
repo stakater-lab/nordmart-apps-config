@@ -1,0 +1,335 @@
+---
+# Source: helm/charts/application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: stakater-nordmart-catalog-42
+    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-catalog"
+    heritage: "Helm"
+  name: stakater-nordmart-catalog-42
+---
+# Source: helm/charts/mysql/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: stakater-nordmart-catalog-mysql
+  labels:
+    app: mysql
+    chart: mysql-7.1.0
+    release: "stakater-nordmart-catalog"
+    heritage: "Helm"
+secrets:
+  - name: catalog-sql-secret
+---
+# Source: helm/charts/mysql/templates/master-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stakater-nordmart-catalog-mysql-master
+  labels:
+    app: mysql
+    chart: mysql-7.1.0
+    release: stakater-nordmart-catalog
+    heritage: Helm
+    component: master
+data:
+  my.cnf: |-
+    [mysqld]
+    default_authentication_plugin=mysql_native_password
+    skip-name-resolve
+    explicit_defaults_for_timestamp
+    basedir=/opt/bitnami/mysql
+    plugin_dir=/opt/bitnami/mysql/plugin
+    port=3306
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    datadir=/bitnami/mysql/data
+    tmpdir=/opt/bitnami/mysql/tmp
+    max_allowed_packet=16M
+    bind-address=0.0.0.0
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+    log-error=/opt/bitnami/mysql/logs/mysqld.log
+    character-set-server=UTF8
+    collation-server=utf8_general_ci
+    
+    [client]
+    port=3306
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mysql/plugin
+    
+    [manager]
+    port=3306
+    socket=/opt/bitnami/mysql/tmp/mysql.sock
+    pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
+---
+# Source: helm/charts/application/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: stakater-nordmart-catalog-42
+    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-catalog"
+    heritage: "Helm"
+  name: stakater-nordmart-catalog-42
+spec:
+  selector:
+    app: stakater-nordmart-catalog-42
+    app: catalog
+  ports:
+    - name: https
+      port: 8080
+---
+# Source: helm/charts/mysql/templates/master-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: stakater-nordmart-catalog-mysql
+  labels:
+    app: mysql
+    chart: mysql-7.1.0
+    release: stakater-nordmart-catalog
+    heritage: Helm
+    component: master
+  annotations:
+    prometheus.io/port: '9104'
+    prometheus.io/scrape: "true"
+spec:
+  type: ClusterIP
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+      nodePort: null
+  selector:
+    app: mysql
+    release: stakater-nordmart-catalog
+    component: master
+---
+# Source: helm/charts/application/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stakater-nordmart-catalog-42
+    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-catalog"
+    heritage: "Helm"
+    appCategory: backend
+  annotations: 
+    reloader.stakater.com/auto: "true"
+  name: stakater-nordmart-catalog-42
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stakater-nordmart-catalog-42
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: stakater-nordmart-catalog-42
+        app: catalog
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
+      containers:
+      - name: stakater-nordmart-catalog-42
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-catalog:SNAPSHOT-PR-42-d6b86198"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: mysql-username
+                name: catalog-sql-secret
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mysql-password
+                name: catalog-sql-secret
+          - name: MYSQL_HOST
+            value: mysql-svc
+          - name: MYSQL_DB_NAME
+            value: catalog
+          - name: KEYCLOAK_REALM
+            value: nordmart
+          - name: KEYCLOAK_URL
+            value: https://keycloak-NAMESPACE.DOMAIN/auth/
+          - name: KEYCLOAK_CLIENT_BACKEND
+            value: stakater-nordmart-backend
+          - name: KEYCLOAK_CLIENT_SECRET_KEY
+            value: 7672aea2-81ff-4aa2-affe-daf3bad10334
+          - name: KAFKA_ADDRESS
+            value: nordmart-kafka-bootstrap:9092
+          - name: JAEGER_ENDPOINT
+            value: http://jaeger-collector.istio-system:14268/api/traces          
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.5
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      serviceAccountName: stakater-nordmart-catalog-42
+---
+# Source: helm/charts/mysql/templates/master-statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stakater-nordmart-catalog-mysql-master
+  labels:
+    app: mysql
+    chart: mysql-7.1.0
+    release: stakater-nordmart-catalog
+    heritage: Helm
+    component: master
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+      release: stakater-nordmart-catalog
+      component: master
+  serviceName: stakater-nordmart-catalog-mysql-master
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mysql
+        chart: mysql-7.1.0
+        release: stakater-nordmart-catalog
+        heritage: Helm
+        component: master
+    spec:      
+      serviceAccountName: stakater-nordmart-catalog-mysql
+      containers:
+        - name: mysql
+          image: docker.io/bitnami/mysql:8.0.22-debian-10-r23
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-sql-secret
+                  key: mysql-root-password
+            - name: MYSQL_DATABASE
+              value: "my_database"
+          ports:
+            - name: mysql
+              containerPort: 3306
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
+                  if [ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]; then
+                      password_aux=$(cat $MYSQL_ROOT_PASSWORD_FILE)
+                  fi
+                  mysqladmin status -uroot -p$password_aux
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - |
+                  password_aux="${MYSQL_ROOT_PASSWORD:-}"
+                  if [ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]; then
+                      password_aux=$(cat $MYSQL_ROOT_PASSWORD_FILE)
+                  fi
+                  mysqladmin status -uroot -p$password_aux
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/mysql
+            - name: config
+              mountPath: /opt/bitnami/mysql/conf/my.cnf
+              subPath: my.cnf
+      volumes:
+        - name: config
+          configMap:
+            name: stakater-nordmart-catalog-mysql-master
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app: mysql
+          component: master
+          release: stakater-nordmart-catalog
+          heritage: Helm
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
+---
+# Source: helm/templates/mysql-secrets.yaml
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  creationTimestamp: null
+  name: catalog-sql-secret
+spec:
+  encryptedData:
+    mysql-password: AgCkRcPw8/JPNwQevmZP4fJpSJFuajjQ00W1L4ydQTG3uTTTUL22rVvtFuVPQPgO/v2em7IMppqopRU6HgEiVko6wt5lCqheNFwDF9x9q6aKZsWMLBv6WAz3LR+QeyQhEZDuaLYWowPuYs1zS33WCP+a+REX5RUhlsx6wICn/zaJ3yWJVXOJky+VGpDGD2XNY6pwC75HtCRERm09SF4/esvc39DaQmpzHg001eMulSRaHItCz1tOOXCFG8k9lcYrELN80bNfU/+BstXEUjlic29c7FrmmvBRymg1VB/W4vIs6cNwtOB4dlBXtxW55ko375cZ8hkctQ9TKySpLCvnnzT7Pjf50biKhtp0WPf/UawolLI7y2s5F5S1idmuxzjK2ypocsm6dokDkwPfvSuobEshWhPTu8slSwuVt2trFvnCB3ONEluykCYQLSWrjqijG+B/ny4t9ZLNwNgmcE4Rm7eosSUU8eOzerdtxGM3L80QMylYxGEhPGPryaMqOvxJtXorZbuF0KK5dSTB9lCxhtoSu7stLFaEvm3Fy3FAVoLvS1W0nVaV9rSbxBnNLKrVFhWCQrwFeUiTlwnrC8gDsrMg+s4YbcHnVGN9Q+J/I13yX2bM3+7o37o0Rjr3Ck3etOtLQ2XfJb5sOOpu8n2aI2gpW0QlA/MFA/mfK/vHqdHMle8NX5PjuyxmAWamg/TPMnC7/dBtcdJKrCXsQkY=
+    mysql-root-password: AgBfKVvLiEZZmPkHIQfnS2V3zfheQHAkh1+qVPgfe7H/EMCCVYI4D8XWJZTtdZsANDqbfUpkFXEj46tKgMHkk2OUghyZV75Kw4rC1M2S10wsDCOJjH99sECtQbW9qu8uxjmSY0DlxCeA3zPTKpNldSAgjWGXT5zoeYgk851QddAL0TQavHWY0pXjsAFd80APP51TICOZOIP8Axpyt36AIhjXKyiGNZeM60ATTV6y6cK8WNttKOMoJfXxoHjP/jY5Qyf+tZOcIYfCOCfModYTQY1HRkyFxd7Xf5MGGZwtZbZkT1M6fjgFh8NwmCLlRHkvn4r3b++PV2Ndv3tO9dzS7vdypG4SnKHBmj3GqKBk8ipB/WWJHc1qQJth1KMY/Vlkl8IOEZek/rM+K0/L2Ly3oAnB+/4ABtCPSHuY1g7BoVRhiHw3qzvacjIw2my4zK7dmKBto/ZvFBxX3mqJlrEm7+IBBCrm4fLYPoj8T1A04BJK0ZZ7sYY7z4TdqpfAuGCcR3oqcmheFbP+Cpwo6C/sDsb/IFskJia3qv3kT4C3BLXBswCTOuKzICeehjLZYnlG3jLUyW8ndNSNF2bluGfjIeXzznZvh0ttFHCnJ0jy85hk54k31P/jl7U3FkkrlEaREafi0FhsT/ozO5alBaImU7q4mt53vUm299LL4m3W+ERzUKY0i3W/8Sioazl35Qs8dWpltBUZ5mUs1CT2
+    mysql-username: AgB7S2nzU6PF8POG8bWJTArkYg0XfV18ebrhviDyzetwMzrEqoAVOYIAfWEJoLXNgCPT2MaoI8rUWN1wg+vosp2caZ4N/qEgygKhQ8ccP3U3/ZK6Usgvh5/tj3BvjC+/S5SRO8AvUHUYiRujl31ye/PdOvLcKKICiYSIEqRLLPfyVySyyB1Y3r9R4c7AYsPTrSbcp0otn1zgOOf6qrFXO/aJPT7o/wHIpvgXlFevwZzX5SAPyVD1LoCejff+eRejhTMCb/tZ2+3kwtmLjATDsmFikinX83NMDlq8WK6Cz2ssiEcKDZtTuOqjtCaYRZu3yArz+OmazCmq3HzDDZeTQ9gdtzqnQLxsrIahNuTrIqTRaCVvzrHHtbcVj8mGPVAerPavoagGXhqtd10fKm3CVIm9roegmtydAoX1g5dlzMyhTSMlnMCHgwtcfP7QErLrLL4eCWwawv6Qgat+XcGJg6FrBG2Kl0bE/MiUqc0EWFcOc5kqVPeG2PqXW3u4F75RJggLZNbK7KMkkvus7y607fODr2E0g9XnDe8kWfLpOsxM70zh00VoAvAuShDDap8fg8ZPeBQtuWH+l4Ht+rmY70Av/B/ueftsdgY3RLX8cdP0LnBTG3eWOII/G+qf+sLuJQfrwuOBHXPgMGSkeTxDe2rfWIcKQhnFibpvro/sXRSmybAQKbOcTMgX178RcJeJQzGzdOaVXsb7eQ==
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      creationTimestamp: null
+      name: catalog-sql-secret
