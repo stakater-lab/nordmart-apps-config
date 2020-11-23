@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-ac19f6c5"
+    appVersion: "SNAPSHOT-PR-40-324f87dc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-ac19f6c5"
+    appVersion: "SNAPSHOT-PR-40-324f87dc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -42,7 +42,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-cart-40
-    appVersion: "SNAPSHOT-PR-40-ac19f6c5"
+    appVersion: "SNAPSHOT-PR-40-324f87dc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -64,10 +64,12 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-cart-40
-    spec:
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
       containers:
       - name: stakater-nordmart-cart-40
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-40-ac19f6c5"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-cart:SNAPSHOT-PR-40-324f87dc"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
