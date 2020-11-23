@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-catalog-42
-    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    appVersion: "SNAPSHOT-PR-42-f814a424"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-catalog-42
-    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    appVersion: "SNAPSHOT-PR-42-f814a424"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -85,7 +85,6 @@ metadata:
 spec:
   selector:
     app: stakater-nordmart-catalog-42
-    app: catalog
   ports:
     - name: https
       port: 8080
@@ -122,7 +121,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-catalog-42
-    appVersion: "SNAPSHOT-PR-42-d6b86198"
+    appVersion: "SNAPSHOT-PR-42-f814a424"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -144,13 +143,12 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-catalog-42
-        app: catalog
     spec:      
       imagePullSecrets:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-catalog-42
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-catalog:SNAPSHOT-PR-42-d6b86198"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-catalog:SNAPSHOT-PR-42-f814a424"
         imagePullPolicy: IfNotPresent
         env:
           - name: MYSQL_USER
