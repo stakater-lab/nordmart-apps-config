@@ -1,0 +1,13 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: nexus-creds
+  namespace: nordmart-dev
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBY95zL5o2gVRjz/vmpz9YBNv6Li8FzhM1PL7JscCBK/2xg4RW7ARofMXoS7OtG1kkIur8xDJwy4C55rc/n+epWa6+gxLA44vg+pk30/PT6kPBos1jYVqepuG3vTzBtkSGceT888VuOpoPX9j59fCPIfeoCUgjXswjAQoTTJT0NB4w5QLNL65kwZG1qhTw7ixrxkt/Tr5qhr6+IWjWHLtD8T/VrsILWM6H/ai1h1I2WDoYcuprOYd53Luf77vxahokCZpF4pXu+jjON6ZtVS2ZDHMLLUjcR7UDKqVatTyiywW5ECltSCWVGYSYkTb/8BK8HQGjzShWdXduIo98WClcjZgpauR4Hx2mYdc0YdIXr89ErCNmp7BMpyAUbeLG8M0vPK0D8Z42WH0JVr0SgcKpyiX05RVnFatE2jIpGn98D763Q/CNHAEnXGewfN2jgvyzq3GvpjmAw48XWpJQbsOsrruAL3qk9QXvV/PAXRHVwiqM54g9VjwoeCd1BfjmWq4y/1OqyBYWUg7TjRO2mALwCCRU7VvRs8Oc+FAIX0KzB6QBmBqxx5Pstxf2UKLM1h5es/3YNuQPzy8W1A7Jhk1b5uLk1gSTjsMJmxHpVovi80AuT1SzCa3h7F7uk7msBENTukBnIUGNM+8xJtK2AtaowqvVJWmqRM4jlsRaml2S71/3o8K4tGgt4H4Fbo1DFn6+IJthCFPma7rwAoH+Q6ywwwyYkHL70MTDvLngo3xFZ6F301R6gUlnHERglcrHVqx5FValVVZ1Ozsm5bqSAyPDHsGzGlNK8arS3mjdSIq+yTZyfrJydWMy/8Th5UxTeCe2Fe3rxSNlldfOu5/dlh5MHLJKjxPhFnNlz9mLs8/OufykMs+oB1J8axlBt0P8=
+  template:
+    metadata:
+      name: nexus-creds
+      namespace: nordmart-dev
+    type: kubernetes.io/dockerconfigjson
