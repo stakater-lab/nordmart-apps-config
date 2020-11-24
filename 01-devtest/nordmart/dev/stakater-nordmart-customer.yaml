@@ -1,0 +1,351 @@
+---
+# Source: helm/charts/application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: customer
+    appVersion: "v0.0.8"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-customer"
+    heritage: "Helm"
+  name: customer
+---
+# Source: helm/charts/cassandra/templates/cassandra-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cassandra
+  namespace: nordmart-dev
+  labels:
+    app.kubernetes.io/name: cassandra
+    helm.sh/chart: cassandra-7.0.1
+    app.kubernetes.io/instance: stakater-nordmart-customer
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  cassandra-password: "Y2Fzc2FuZHJh"
+---
+# Source: helm/charts/application/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: customer
+    appVersion: "v0.0.8"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-customer"
+    heritage: "Helm"
+  name: customer
+spec:
+  selector:
+    app: customer
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+---
+# Source: helm/charts/cassandra/templates/headless-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra-headless
+  namespace: nordmart-dev
+  labels:
+    app.kubernetes.io/name: cassandra
+    helm.sh/chart: cassandra-7.0.1
+    app.kubernetes.io/instance: stakater-nordmart-customer
+    app.kubernetes.io/managed-by: Helm
+spec:
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: intra
+      port: 7000
+      targetPort: intra
+    - name: tls
+      port: 7001
+      targetPort: tls
+    - name: jmx
+      port: 7199
+      targetPort: jmx
+    - name: cql
+      port: 9042
+      targetPort: cql
+    - name: thrift
+      port: 9160
+      targetPort: thrift
+  selector:
+    app.kubernetes.io/name: cassandra
+    app.kubernetes.io/instance: stakater-nordmart-customer
+---
+# Source: helm/charts/cassandra/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra
+  namespace: nordmart-dev
+  labels:
+    app.kubernetes.io/name: cassandra
+    helm.sh/chart: cassandra-7.0.1
+    app.kubernetes.io/instance: stakater-nordmart-customer
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: cql
+      port: 9042
+      targetPort: cql
+      nodePort: null
+    - name: thrift
+      port: 9160
+      targetPort: thrift
+      nodePort: null
+    - name: metrics
+      port: 8080
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: cassandra
+    app.kubernetes.io/instance: stakater-nordmart-customer
+---
+# Source: helm/charts/application/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: customer
+    appVersion: "v0.0.8"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-customer"
+    heritage: "Helm"
+    appCategory: backend
+  annotations: 
+    reloader.stakater.com/auto: "true"
+  name: customer
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: customer
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: customer
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
+      containers:
+      - name: customer
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-customer:v0.0.8"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: CATALOG_ENDPOINT
+            value: catalog:8080
+          - name: CASSANDRA_HOST
+            value: cassandra
+          - name: CASSANDRA_USERNAME
+            value: cassandra
+          - name: CASSANDRA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: cassandra-password
+                name: cassandra
+          - name: KEYCLOAK_REALM
+            value: nordmart
+          - name: KEYCLOAK_URL
+            value: https://iam-keycloak-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud/auth/
+          - name: KEYCLOAK_CLIENT_BACKEND
+            value: stakater-nordmart-backend
+          - name: KEYCLOAK_CLIENT_SECRET_KEY
+            value: 7672aea2-81ff-4aa2-affe-daf3bad10334
+          - name: JAEGER_ENDPOINT
+            value: http://jaeger-collector.istio-system:14268/api/traces          
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 0.5
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      serviceAccountName: customer
+---
+# Source: helm/charts/cassandra/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: cassandra
+  namespace: nordmart-dev
+  labels:
+    app.kubernetes.io/name: cassandra
+    helm.sh/chart: cassandra-7.0.1
+    app.kubernetes.io/instance: stakater-nordmart-customer
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cassandra
+      app.kubernetes.io/instance: stakater-nordmart-customer
+  serviceName: cassandra-headless
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cassandra
+        helm.sh/chart: cassandra-7.0.1
+        app.kubernetes.io/instance: stakater-nordmart-customer
+        app.kubernetes.io/managed-by: Helm
+    spec:
+      
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: cassandra
+                    app.kubernetes.io/instance: stakater-nordmart-customer
+                namespaces:
+                  - nordmart-dev
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      containers:
+        - name: cassandra
+          command:
+            - bash
+            - -ec
+            - |
+              # Node 0 is the password seeder
+              if [[ $HOSTNAME =~ (.*)-0$ ]]; then
+                  echo "Setting node as password seeder"
+                  export CASSANDRA_PASSWORD_SEEDER=yes
+              else
+                  # Only node 0 will execute the startup initdb scripts
+                  export CASSANDRA_IGNORE_INITDB_SCRIPTS=1
+              fi
+              /opt/bitnami/scripts/cassandra/entrypoint.sh /opt/bitnami/scripts/cassandra/run.sh
+          image: docker.io/bitnami/cassandra:3.11.9-debian-10-r0
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: CASSANDRA_CLUSTER_NAME
+              value: cassandra
+            - name: CASSANDRA_SEEDS
+              value: "cassandra-0.cassandra-headless.nordmart-dev.svc.cluster.local"
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cassandra
+                  key: cassandra-password
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: CASSANDRA_USER
+              value: "cassandra"
+            - name: CASSANDRA_NUM_TOKENS
+              value: "256"
+            - name: CASSANDRA_DATACENTER
+              value: dc1
+            - name: CASSANDRA_ENDPOINT_SNITCH
+              value: GossipingPropertyFileSnitch
+            - name: CASSANDRA_RACK
+              value: rack1
+            - name: MAX_HEAP_SIZE
+              value: "512M"
+            - name: HEAP_NEWSIZE
+              value: "512M"
+            - name: CASSANDRA_ENABLE_RPC
+              value: "true"
+          envFrom:
+          livenessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool status
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -ec
+                - |
+                  nodetool status | grep -E "^UN\\s+${POD_IP}"
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          ports:
+            - name: intra
+              containerPort: 7000
+            - name: tls
+              containerPort: 7001
+            - name: jmx
+              containerPort: 7199
+            - name: cql
+              containerPort: 9042
+            - name: thrift
+              containerPort: 9160
+          resources: 
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/cassandra
+            
+      volumes:
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app.kubernetes.io/name: cassandra
+          app.kubernetes.io/instance: stakater-nordmart-customer
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: "8Gi"
