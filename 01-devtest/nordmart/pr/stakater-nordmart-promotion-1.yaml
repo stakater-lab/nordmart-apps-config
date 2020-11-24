@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-34738db4"
+    appVersion: "SNAPSHOT-PR-1-37ddec70"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -39,9 +39,9 @@ metadata:
     heritage: Helm
 type: Opaque
 data:
-  mysql-root-password: "VWFiN2pNRlhsVg=="
+  mysql-root-password: "ZjdSck1pclJKTw=="
   
-  mysql-password: "b1hUb1gxeDcxbA=="
+  mysql-password: "ZFN4MnluV1QzUQ=="
 ---
 # Source: helm/charts/mysql/templates/master-configmap.yaml
 apiVersion: v1
@@ -90,7 +90,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-34738db4"
+    appVersion: "SNAPSHOT-PR-1-37ddec70"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -138,7 +138,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-34738db4"
+    appVersion: "SNAPSHOT-PR-1-37ddec70"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -165,16 +165,13 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-promotion-1
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-34738db4"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-37ddec70"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
             value: promotion-sql
           - name: SQL_USER
-            valueFrom:
-              secretKeyRef:
-                key: mysql-username
-                name: promotion-sql
+            value: nordman
           - name: SQL_PASSWORD
             valueFrom:
               secretKeyRef:
