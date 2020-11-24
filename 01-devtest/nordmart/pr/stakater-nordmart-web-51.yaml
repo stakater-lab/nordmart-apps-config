@@ -1,0 +1,140 @@
+---
+# Source: helm/charts/application/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: stakater-nordmart-web-51
+    appVersion: "SNAPSHOT-PR-51-06f982b7"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-web"
+    heritage: "Helm"
+  name: stakater-nordmart-web-51
+---
+# Source: helm/charts/application/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: stakater-nordmart-web-51
+    appVersion: "SNAPSHOT-PR-51-06f982b7"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-web"
+    heritage: "Helm"
+  name: stakater-nordmart-web-51
+spec:
+  selector:
+    app: stakater-nordmart-web-51
+  ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 4200
+---
+# Source: helm/charts/application/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stakater-nordmart-web-51
+    appVersion: "SNAPSHOT-PR-51-06f982b7"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-web"
+    heritage: "Helm"
+    appCategory: frontend
+  annotations: 
+    reloader.stakater.com/auto: "true"
+  name: stakater-nordmart-web-51
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stakater-nordmart-web-51
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: stakater-nordmart-web-51
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
+      containers:
+      - name: stakater-nordmart-web-51
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-web:SNAPSHOT-PR-51-06f982b7"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: PORT
+            value: "4200"
+          - name: SECURE_GW_ENDPOINT
+            value: https://gateway-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud
+          - name: SSO_URL
+            value: https://iam-keycloak-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud/auth/
+          - name: SSO_REALM
+            value: nordmart
+          - name: SSO_CLIENT_ID
+            value: stakater-nordmart-web
+          - name: JAEGER_ENDPOINT
+            value: http://jaeger-collector.istio-system:14268/api/traces          
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /health
+            port: 4200
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /health
+            port: 4200
+        resources:
+          limits:
+            memory: 256Mi
+            cpu: 0.5
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      serviceAccountName: stakater-nordmart-web-51
+---
+# Source: helm/charts/application/templates/route.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: stakater-nordmart-web-51
+  labels:
+    app: stakater-nordmart-web-51
+    appVersion: "SNAPSHOT-PR-51-06f982b7"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-web"
+    heritage: "Helm"
+spec:
+  port:
+    targetPort: http
+
+  to:
+    kind: Service
+    name: stakater-nordmart-web-51
+    weight: 100
+  wildcardPolicy: None
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
