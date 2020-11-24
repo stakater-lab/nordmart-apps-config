@@ -5,7 +5,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-search-9
-    appVersion: "SNAPSHOT-PR-9-36550f54"
+    appVersion: "SNAPSHOT-PR-9-e95e697d"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -16,7 +16,6 @@ metadata:
 spec:
   selector:
     app: stakater-nordmart-search-9
-    app: search
   ports:
     - name: https
       port: 8080
@@ -28,7 +27,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-search-9
-    appVersion: "SNAPSHOT-PR-9-36550f54"
+    appVersion: "SNAPSHOT-PR-9-e95e697d"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -50,13 +49,12 @@ spec:
     metadata:
       labels:
         app: stakater-nordmart-search-9
-        app: search
     spec:      
       imagePullSecrets:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-search-9
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-search:SNAPSHOT-PR-9-36550f54"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-search:SNAPSHOT-PR-9-e95e697d"
         imagePullPolicy: IfNotPresent
         env:
           - name: ELASTICSEARCH_USERNAME
@@ -96,7 +94,7 @@ spec:
             port: 8080
         resources:
           limits:
-            memory: 256Mi
+            memory: 1Gi
             cpu: 0.5
           requests:
             memory: 128Mi
