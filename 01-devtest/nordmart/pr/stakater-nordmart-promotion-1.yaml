@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-37ddec70"
+    appVersion: "SNAPSHOT-PR-1-d7483572"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -25,23 +25,7 @@ metadata:
     release: "stakater-nordmart-promotion"
     heritage: "Helm"
 secrets:
-  - name: promotion-sql
----
-# Source: helm/charts/mysql/templates/secrets.yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: promotion-sql
-  labels:
-    app: mysql
-    chart: mysql-7.1.0
-    release: stakater-nordmart-promotion
-    heritage: Helm
-type: Opaque
-data:
-  mysql-root-password: "ZjdSck1pclJKTw=="
-  
-  mysql-password: "ZFN4MnluV1QzUQ=="
+  - name: promotion-sql-secret
 ---
 # Source: helm/charts/mysql/templates/master-configmap.yaml
 apiVersion: v1
@@ -90,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-37ddec70"
+    appVersion: "SNAPSHOT-PR-1-d7483572"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -138,7 +122,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-37ddec70"
+    appVersion: "SNAPSHOT-PR-1-d7483572"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -165,18 +149,18 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-promotion-1
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-37ddec70"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-d7483572"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
-            value: promotion-sql
+            value: promotion-sql-secret
           - name: SQL_USER
-            value: nordman
+            value: root
           - name: SQL_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: mysql-password
-                name: promotion-sql          
+                key: mysql-root-password
+                name: promotion-sql-secret          
         livenessProbe:
           failureThreshold: 3
           periodSeconds: 10
@@ -247,14 +231,14 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: promotion-sql
+                  name: promotion-sql-secret
                   key: mysql-root-password
             - name: MYSQL_USER
               value: "nordman"
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: promotion-sql
+                  name: promotion-sql-secret
                   key: mysql-password
             - name: MYSQL_DATABASE
               value: "nordman-promotion"
