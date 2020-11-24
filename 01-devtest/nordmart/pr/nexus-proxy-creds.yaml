@@ -1,0 +1,18 @@
+name sealed-secrets 
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: nexus-proxy-secret
+  namespace: nordmart-pr
+spec:
+  encryptedData:
+    .dockerconfigjson: AgBZ2dL5vfWz+nz2/gRrc1ZDbvUeVZG5FCHXQCj9q1DDkGfB4215aAPePcudpfDcBAAVI+k9L1vdP4y8VqmZcn6c+unHGl9Mr445GE5TjSwv8GdvbCtPPuQ01PC590Ukl51IAYshg/eb65JyibEg/DRrL2e18bat1+AJhj0VnVuDZEOvrEf94zTqldjeTtLIr7O/pNwYUBP7CEWF+9y7aa3pIblqLwKfFklhfO5sK7XqjyqOs7TOuBr9VXfn37hblCBrOy/pYOsUa0vmFM9WdTMeEDT1h3y/Zl07myQRZASrzaZ3my3LhF6km4xgFnQBiWkNj4OQlZqBA2877v1fCRbqwL/RWL8gVl7TcejElmVMx6WsYrM7ebFnpikYotuo43rdNykXiTS3a7++oan4L2UsfCApB6Fvrvges5qgNGNQ+LJmHxXcsxt2heKQHcFM+ytl5aXYP3B/GmX1ucDfUFQvYa8LumFAY945D3P5VYDlOuxS2+cuma0YctLOvrRc5n+JFbM4NX7l/Lftu9+/GQWvrMN9bH2nXRpuDzJdMU/5zD1TktEL2p1ojnE3TGp13+oQRbk9a7BMtia3jEuD3B5ei/iYL83ht45TWCl5WYfNRL6VUMHA1MnrLiAPRgeQdIS2thIqLu7N2X8uibkIYNHFJoVrXSkebfBmxyLIhnjDpxvkkmn0js0zRXcFBrbhheP/lyVcZQPLpcLabL2T0tJeVpqBSaYxmM37u9N1h1oiMYzVwKyU05S+eR72+jsnzbGeRrAXiA3sQlbeLvMmzyYWnNWTmUsq/mEVg+DqZGkolkT6N38JyAyX79YGdWxoeYW8kqswQy6nU6q+nUKdHUeYa/Gty/HzxuMCdfheEA+NJbeAXXb8zMWIg5G4BfpEzeYtxs6k3+Mi46k0+7se/n+Z5icWm9C7Eke1ZBEo68jI1/cQiLQl++zy0YyTJhlliD8=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: nexus-proxy-secret
+      namespace: nordmart-pr
+    type: kubernetes.io/dockerconfigjson
+
+
