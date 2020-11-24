@@ -168,7 +168,7 @@ spec:
           - name: KEYCLOAK_REALM
             value: nordmart
           - name: KEYCLOAK_URL
-            value: https://keycloak-NAMESPACE.DOMAIN/auth/
+            value: https://iam-keycloak-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud/auth/
           - name: KEYCLOAK_CLIENT_BACKEND
             value: stakater-nordmart-backend
           - name: KEYCLOAK_CLIENT_SECRET_KEY
@@ -197,7 +197,7 @@ spec:
             port: 8080
         resources:
           limits:
-            memory: 256Mi
+            memory: 1Gi
             cpu: 0.5
           requests:
             memory: 128Mi
