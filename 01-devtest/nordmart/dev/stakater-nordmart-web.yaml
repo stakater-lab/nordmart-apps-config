@@ -32,8 +32,8 @@ spec:
   selector:
     app: web
   ports:
-    - name: tcp
-      port: 4200
+    - name: http
+      port: 8080
       protocol: TCP
       targetPort: 4200
 ---
