@@ -5,7 +5,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-search-9
-    appVersion: "SNAPSHOT-PR-9-e95e697d"
+    appVersion: "SNAPSHOT-PR-9-72bc5770"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -27,7 +27,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-search-9
-    appVersion: "SNAPSHOT-PR-9-e95e697d"
+    appVersion: "SNAPSHOT-PR-9-72bc5770"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -54,7 +54,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-search-9
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-search:SNAPSHOT-PR-9-e95e697d"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-search:SNAPSHOT-PR-9-72bc5770"
         imagePullPolicy: IfNotPresent
         env:
           - name: ELASTICSEARCH_USERNAME
