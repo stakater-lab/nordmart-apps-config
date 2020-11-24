@@ -234,7 +234,7 @@ spec:
                   name: promotion-sql-secret
                   key: mysql-root-password
             - name: MYSQL_DATABASE
-              value: "nordman-promotion"
+              value: "my_database"
           ports:
             - name: mysql
               containerPort: 3306
