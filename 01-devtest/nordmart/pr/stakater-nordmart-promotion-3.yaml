@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-promotion-3
-    appVersion: "SNAPSHOT-PR-3-e56e783f"
+    appVersion: "SNAPSHOT-PR-3-65e8f6cc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-promotion-3
-    appVersion: "SNAPSHOT-PR-3-e56e783f"
+    appVersion: "SNAPSHOT-PR-3-65e8f6cc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -122,7 +122,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-promotion-3
-    appVersion: "SNAPSHOT-PR-3-e56e783f"
+    appVersion: "SNAPSHOT-PR-3-65e8f6cc"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -149,7 +149,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-promotion-3
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-3-e56e783f"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-3-65e8f6cc"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
