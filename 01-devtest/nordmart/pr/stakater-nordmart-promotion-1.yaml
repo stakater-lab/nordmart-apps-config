@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-02a5eca5"
+    appVersion: "SNAPSHOT-PR-1-14e7163c"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-02a5eca5"
+    appVersion: "SNAPSHOT-PR-1-14e7163c"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -122,7 +122,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-02a5eca5"
+    appVersion: "SNAPSHOT-PR-1-14e7163c"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -149,7 +149,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-promotion-1
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-02a5eca5"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-14e7163c"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
@@ -237,7 +237,7 @@ spec:
                   name: promotion-sql-secret
                   key: mysql-root-password
             - name: MYSQL_DATABASE
-              value: "my_database"
+              value: "nordman-promotion"
           ports:
             - name: mysql
               containerPort: 3306
