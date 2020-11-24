@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-customer-12
-    appVersion: "SNAPSHOT-PR-12-b05b5216"
+    appVersion: "SNAPSHOT-PR-12-f85d3e55"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -35,7 +35,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-customer-12
-    appVersion: "SNAPSHOT-PR-12-b05b5216"
+    appVersion: "SNAPSHOT-PR-12-f85d3e55"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -120,7 +120,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-customer-12
-    appVersion: "SNAPSHOT-PR-12-b05b5216"
+    appVersion: "SNAPSHOT-PR-12-f85d3e55"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -147,7 +147,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-customer-12
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-customer:SNAPSHOT-PR-12-b05b5216"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-customer:SNAPSHOT-PR-12-f85d3e55"
         imagePullPolicy: IfNotPresent
         env:
           - name: CATALOG_ENDPOINT
@@ -164,7 +164,7 @@ spec:
           - name: KEYCLOAK_REALM
             value: nordmart
           - name: KEYCLOAK_URL
-            value: https://keycloak-NAMESPACE.DOMAIN/auth/
+            value: https://iam-keycloak-nordmart-dev.apps.binero.06p407u4.kubeapp.cloud/auth/
           - name: KEYCLOAK_CLIENT_BACKEND
             value: stakater-nordmart-backend
           - name: KEYCLOAK_CLIENT_SECRET_KEY
@@ -191,7 +191,7 @@ spec:
             port: 8080
         resources:
           limits:
-            memory: 256Mi
+            memory: 1Gi
             cpu: 0.5
           requests:
             memory: 128Mi
