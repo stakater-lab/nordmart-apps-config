@@ -32,7 +32,7 @@ spec:
   selector:
     app: gateway
   ports:
-    - name: https
+    - name: http
       port: 8080
       targetPort: 8080
 ---
