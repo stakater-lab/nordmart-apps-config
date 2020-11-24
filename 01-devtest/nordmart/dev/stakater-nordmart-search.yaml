@@ -1,0 +1,130 @@
+---
+# Source: helm/charts/application/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: search
+    appVersion: "v0.0.6"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-search"
+    heritage: "Helm"
+  name: search
+spec:
+  selector:
+    app: search
+  ports:
+    - name: https
+      port: 8080
+      targetPort: 8080
+---
+# Source: helm/charts/application/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: search
+    appVersion: "v0.0.6"
+    group: com.stakater.platform
+    provider: stakater
+    team: stakater
+    chart: "application-0.0.29"
+    release: "stakater-nordmart-search"
+    heritage: "Helm"
+    appCategory: backend
+  annotations: 
+    reloader.stakater.com/auto: "true"
+  name: search
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: search
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: search
+    spec:      
+      imagePullSecrets:
+      - name: nexus-creds
+      containers:
+      - name: search
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-search:v0.0.6"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: ELASTICSEARCH_USERNAME
+            value: elastic
+          - name: ELASTICSEARCH_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: elastic
+                name: search-elasticsearch-es-elastic-user
+          - name: ELASTICSEARCH_HOST
+            value: search-elasticsearch-es-http
+          - name: ELASTICSEARCH_PORT
+            value: "9200"
+          - name: KAFKA_ADDRESS
+            value: nordmart-kafka-bootstrap
+          - name: KAFKA_PORT
+            value: "9092"
+          - name: JAEGER_ENDPOINT
+            value: http://jaeger-collector.istio-system:14268/api/traces          
+        livenessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 60
+          successThreshold: 1
+          timeoutSeconds: 1
+          initialDelaySeconds: 10
+          httpGet:
+            path: /actuator/health
+            port: 8080
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 0.5
+          requests:
+            memory: 128Mi
+            cpu: 0.1
+      serviceAccountName: default
+---
+# Source: helm/templates/elasticsearch.yaml
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: search-elasticsearch
+spec:
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  nodeSets:
+    - name: default
+      config:
+        node.master: true
+        node.data: true
+        node.attr.attr_name: attr_value
+        node.store.allow_mmap: false
+      podTemplate:
+        spec:
+          containers:
+            - name: elasticsearch
+              resources:
+                requests:
+                  memory: 4Gi
+                  cpu: 1
+      count: 1
+  version: 7.8.1
