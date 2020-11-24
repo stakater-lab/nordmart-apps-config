@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-6b969cfe"
+    appVersion: "SNAPSHOT-PR-1-dd96ff4e"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-6b969cfe"
+    appVersion: "SNAPSHOT-PR-1-dd96ff4e"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -122,7 +122,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-promotion-1
-    appVersion: "SNAPSHOT-PR-1-6b969cfe"
+    appVersion: "SNAPSHOT-PR-1-dd96ff4e"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -149,7 +149,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-promotion-1
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-6b969cfe"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:SNAPSHOT-PR-1-dd96ff4e"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
@@ -221,10 +221,12 @@ spec:
         heritage: Helm
         component: master
     spec:      
+      imagePullSecrets:
+        - name: map[name:nexus-creds]
       serviceAccountName: promotion-sql
       containers:
         - name: mysql
-          image: docker.io/bitnami/mysql:8.0.22-debian-10-r23
+          image: nexus-docker-proxy-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/bitnami/mysql:8.0.22-debian-10-r23
           imagePullPolicy: "IfNotPresent"
           env:
             - name: BITNAMI_DEBUG
