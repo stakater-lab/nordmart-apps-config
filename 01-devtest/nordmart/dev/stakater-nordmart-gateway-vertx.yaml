@@ -98,6 +98,10 @@ spec:
             value: review
           - name: REVIEW_API_PORT
             value: "8080"
+          - name: PROMOTION_API_HOST
+            value: promotion
+          - name: PROMOTION_API_PORT
+            value: "8080"
           - name: HTTP_PORT
             value: "8080"          
         livenessProbe:
