@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: stakater-nordmart-gateway-vertx-15
-    appVersion: "SNAPSHOT-PR-15-aa260f0a"
+    appVersion: "SNAPSHOT-PR-15-cebd5317"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: stakater-nordmart-gateway-vertx-15
-    appVersion: "SNAPSHOT-PR-15-aa260f0a"
+    appVersion: "SNAPSHOT-PR-15-cebd5317"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -42,7 +42,7 @@ kind: Deployment
 metadata:
   labels:
     app: stakater-nordmart-gateway-vertx-15
-    appVersion: "SNAPSHOT-PR-15-aa260f0a"
+    appVersion: "SNAPSHOT-PR-15-cebd5317"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -69,7 +69,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: stakater-nordmart-gateway-vertx-15
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-gateway-vertx:SNAPSHOT-PR-15-aa260f0a"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-gateway-vertx:SNAPSHOT-PR-15-cebd5317"
         imagePullPolicy: IfNotPresent
         env:
           - name: CUSTOMER_API_HOST
@@ -134,7 +134,7 @@ metadata:
   name: stakater-nordmart-gateway-vertx-15
   labels:
     app: stakater-nordmart-gateway-vertx-15
-    appVersion: "SNAPSHOT-PR-15-aa260f0a"
+    appVersion: "SNAPSHOT-PR-15-cebd5317"
     group: com.stakater.platform
     provider: stakater
     team: stakater
