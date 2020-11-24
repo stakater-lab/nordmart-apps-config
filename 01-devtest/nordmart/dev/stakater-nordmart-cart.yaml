@@ -54,7 +54,7 @@ metadata:
     reloader.stakater.com/auto: "true"
   name: cart
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: cart
