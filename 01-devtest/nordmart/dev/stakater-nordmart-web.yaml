@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: web
-    appVersion: "v0.0.41"
+    appVersion: "v0.0.42"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -20,7 +20,7 @@ kind: Service
 metadata:
   labels:
     app: web
-    appVersion: "v0.0.41"
+    appVersion: "v0.0.42"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -43,7 +43,7 @@ kind: Deployment
 metadata:
   labels:
     app: web
-    appVersion: "v0.0.41"
+    appVersion: "v0.0.42"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -70,7 +70,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: web
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-web:v0.0.41"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-web:v0.0.42"
         imagePullPolicy: IfNotPresent
         env:
           - name: PORT
@@ -119,7 +119,7 @@ metadata:
   name: web
   labels:
     app: web
-    appVersion: "v0.0.41"
+    appVersion: "v0.0.42"
     group: com.stakater.platform
     provider: stakater
     team: stakater
