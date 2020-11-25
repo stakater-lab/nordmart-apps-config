@@ -5,7 +5,7 @@ kind: ServiceAccount
 metadata:
   labels:
     app: promotion
-    appVersion: "0.0.2"
+    appVersion: "0.0.3"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -74,7 +74,7 @@ kind: Service
 metadata:
   labels:
     app: promotion
-    appVersion: "0.0.2"
+    appVersion: "0.0.3"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -122,7 +122,7 @@ kind: Deployment
 metadata:
   labels:
     app: promotion
-    appVersion: "0.0.2"
+    appVersion: "0.0.3"
     group: com.stakater.platform
     provider: stakater
     team: stakater
@@ -149,7 +149,7 @@ spec:
       - name: nexus-creds
       containers:
       - name: promotion
-        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:0.0.2"
+        image: "nexus-docker-openshift-stakater-nexus.apps.binero.06p407u4.kubeapp.cloud/repository/docker/stakater-nordmart-promotion:0.0.3"
         imagePullPolicy: IfNotPresent
         env:
           - name: SQL_HOST
